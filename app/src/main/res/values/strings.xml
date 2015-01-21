@@ -1,4 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CustomSqlite</string>
+
+    <string-array name="dummy_names">
+        <item>Bobbye</item>
+        <item>Claudie</item>
+        <item>Gracia</item>
+        <item>Kalyn</item>
+        <item>Dani</item>
+        <item>Keitha</item>
+        <item>Leandro</item>
+        <item>Tyler</item>
+        <item>Arlyne</item>
+        <item>Krum</item>
+        <item>Li</item>
+        <item>Angele</item>
+        <item>Joanna</item>
+        <item>Willow</item>
+        <item>Sarai</item>
+        <item>Sha</item>
+        <item>Sandee</item>
+        <item>Werner</item>
+        <item>Krissy</item>
+        <item>Kenyetta</item>
+        <item>Jannette</item>
+        <item>Casandra</item>
+        <item>Fern</item>
+        <item>Cherri</item>
+        <item>Criselda</item>
+        <item>Sarita</item>
+        <item>Daniele</item>
+        <item>Thad</item>
+        <item>Lashawnda</item>
+        <item>Jerri</item>
+        <item>Asley</item>
+        <item>Suk</item>
+        <item>Petronila</item>
+        <item>Adriane</item>
+        <item>Jonnie</item>
+        <item>Leonardo</item>
+        <item>Sherrie</item>
+        <item>Laverne</item>
+        <item>Keven</item>
+        <item>Talisha</item>
+        <item>Aracelis</item>
+        <item>Lakeesha</item>
+        <item>Yesenia</item>
+        <item>Darcie</item>
+        <item>Stuart</item>
+        <item>Drew</item>
+        <item>Valarie</item>
+        <item>Alfreda</item>
+        <item>Dillon</item>
+        <item>Margo</item>
+    </string-array>
+
 </resources>

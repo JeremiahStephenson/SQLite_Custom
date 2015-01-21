@@ -19,10 +19,13 @@ android {
 
     // call regular ndk-build(.cmd) script from app directory
     task ndkBuild(type: Exec) {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        def ndkDir = properties.getProperty('ndk.dir')
         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
             commandLine 'ndk-build.cmd', '-C', file('src/main').absolutePath
         } else {
-            commandLine '/Users/jeremiahstephenson/Documents/Android/android-ndk-r10d/ndk-build', '-C', file('src/main').absolutePath
+            commandLine ndkDir + '/ndk-build', '-C', file('src/main').absolutePath
         }
     }
 
@@ -32,6 +35,7 @@ android {
 
     dependencies {
         compile 'com.android.support:appcompat-v7:21.0.3' // includes support-v4
+        compile fileTree(dir: 'libs', include: ['*.jar'])
     }
 
     buildTypes {
