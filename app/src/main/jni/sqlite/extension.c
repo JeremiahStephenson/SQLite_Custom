@@ -13,8 +13,11 @@
 */
 #include <sqlite3.h>
 #include <sqlite3ext.h>
+#include <android/log.h>
 
 #include "fts3_unicodesn.h"
+
+#define APPNAME "CustomSQLTest"
 
 SQLITE_EXTENSION_INIT1
 
@@ -47,7 +50,7 @@ static int registerTokenizer(
 ** modules here.  This is usually the only exported symbol in
 ** the shared library.
 */
-int sqlite3_extension_init(
+int sqlite3_extension_init_test(
       sqlite3 *db,          /* The database connection */
       char **pzErrMsg,      /* Write error messages here */
       const sqlite3_api_routines *pApi  /* API methods */

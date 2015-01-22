@@ -373,7 +373,13 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        db.rawQuery("SELECT load_extension('libunicodesn', 'sqlite3_extension_init')", null);
+        try {
+            db.execSQL("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+
+        //db.execSQL("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=unicodesn)");
 
         final String[] names = getResources().getStringArray(R.array.dummy_names);
@@ -412,12 +418,12 @@ public class CustomSqlite extends Activity {
             public Object call() throws Exception {
                 try {
                     reportVersion();
-                    csrTest1();
-                    csrTest2();
-                    threadTest1();
-                    threadTest2();
-                    seeTest1();
-                    seeTest2();
+//                    csrTest1();
+//                    csrTest2();
+//                    threadTest1();
+//                    threadTest2();
+//                    seeTest1();
+//                    seeTest2();
                     ftsTest1();
                     return null;
                 } catch(Exception e) {
