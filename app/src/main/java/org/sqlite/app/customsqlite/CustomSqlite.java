@@ -373,7 +373,8 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=unicodesn)");
+        db.rawQuery("SELECT load_extension('libunicodesn', 'sqlite3_extension_init')", null);
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=unicodesn)");
 
         final String[] names = getResources().getStringArray(R.array.dummy_names);
 
