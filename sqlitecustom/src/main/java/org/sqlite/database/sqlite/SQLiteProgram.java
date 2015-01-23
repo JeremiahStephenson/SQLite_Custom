@@ -20,9 +20,8 @@
 
 package org.sqlite.database.sqlite;
 
-import org.sqlite.os.CancellationSignal;
-
 import org.sqlite.database.DatabaseUtils;
+import org.sqlite.os.CancellationSignal;
 
 import java.util.Arrays;
 

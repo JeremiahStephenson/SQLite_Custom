@@ -20,12 +20,12 @@
 
 package org.sqlite.database.sqlite;
 
-import java.util.ArrayList;
-
-import android.os.Build;
-/* import android.os.SystemProperties; */
 import android.util.Log;
 import android.util.Printer;
+
+import java.util.ArrayList;
+
+/* import android.os.SystemProperties; */
 
 /**
  * Provides debugging info about all SQLite databases running in the current process.

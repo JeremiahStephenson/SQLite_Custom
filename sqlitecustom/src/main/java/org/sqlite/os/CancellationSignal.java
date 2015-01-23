@@ -20,7 +20,6 @@
 
 package org.sqlite.os;
 
-import org.sqlite.os.ICancellationSignal;
 import android.os.RemoteException;
 
 /**
@@ -50,9 +49,9 @@ public final class CancellationSignal {
     }
 
     /**
-     * Throws {@link OperationCanceledException} if the operation has been canceled.
+     * Throws {@link org.sqlite.os.OperationCanceledException} if the operation has been canceled.
      *
-     * @throws OperationCanceledException if the operation has been canceled.
+     * @throws org.sqlite.os.OperationCanceledException if the operation has been canceled.
      */
     public void throwIfCanceled() {
         if (isCanceled()) {
@@ -103,7 +102,7 @@ public final class CancellationSignal {
      * while performing a long-running operation.  This method is not intended to be
      * used by applications themselves.
      *
-     * If {@link CancellationSignal#cancel} has already been called, then the provided
+     * If {@link org.sqlite.os.CancellationSignal#cancel} has already been called, then the provided
      * listener is invoked immediately.
      *
      * This method is guaranteed that the listener will not be called after it
@@ -129,7 +128,7 @@ public final class CancellationSignal {
     /**
      * Sets the remote transport.
      *
-     * If {@link CancellationSignal#cancel} has already been called, then the provided
+     * If {@link org.sqlite.os.CancellationSignal#cancel} has already been called, then the provided
      * remote transport is canceled immediately.
      *
      * This method is guaranteed that the remote transport will not be called after it
@@ -198,7 +197,7 @@ public final class CancellationSignal {
      */
     public interface OnCancelListener {
         /**
-         * Called when {@link CancellationSignal#cancel} is invoked.
+         * Called when {@link org.sqlite.os.CancellationSignal#cancel} is invoked.
          */
         void onCancel();
     }

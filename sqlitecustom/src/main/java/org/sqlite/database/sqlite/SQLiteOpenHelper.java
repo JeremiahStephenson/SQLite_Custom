@@ -21,10 +21,10 @@
 package org.sqlite.database.sqlite;
 
 import android.content.Context;
-import org.sqlite.database.DatabaseErrorHandler;
-import org.sqlite.database.DefaultDatabaseErrorHandler;
-import org.sqlite.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.util.Log;
+
+import org.sqlite.database.DatabaseErrorHandler;
+import org.sqlite.database.sqlite.SQLiteDatabase.CursorFactory;
 
 /**
  * A helper class to manage database creation and version management.

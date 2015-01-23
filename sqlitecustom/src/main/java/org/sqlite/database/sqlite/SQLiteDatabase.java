@@ -29,15 +29,13 @@ import android.util.Log;
 import android.util.Pair;
 import android.util.Printer;
 
-import org.sqlite.os.CancellationSignal;
-import org.sqlite.os.OperationCanceledException;
-
 import org.sqlite.database.DatabaseErrorHandler;
 import org.sqlite.database.DatabaseUtils;
 import org.sqlite.database.DefaultDatabaseErrorHandler;
 import org.sqlite.database.ExtraUtils;
 import org.sqlite.database.SQLException;
 import org.sqlite.database.sqlite.SQLiteDebug.DbStats;
+import org.sqlite.os.CancellationSignal;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -668,7 +666,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *            cursor when query is called, or null for default
      * @param flags to control database access mode
      * @return the newly opened database
-     * @throws SQLiteException if the database cannot be opened
+     * @throws org.sqlite.database.sqlite.SQLiteException if the database cannot be opened
      */
     public static SQLiteDatabase openDatabase(String path, CursorFactory factory, int flags) {
         return openDatabase(path, factory, flags, null);
@@ -681,17 +679,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * <p>Sets the locale of the database to the  the system's current locale.
      * Call {@link #setLocale} if you would like something else.</p>
      *
-     * <p>Accepts input param: a concrete instance of {@link DatabaseErrorHandler} to be
+     * <p>Accepts input param: a concrete instance of {@link org.sqlite.database.DatabaseErrorHandler} to be
      * used to handle corruption when sqlite reports database corruption.</p>
      *
      * @param path to database file to open and/or create
      * @param factory an optional factory class that is called to instantiate a
      *            cursor when query is called, or null for default
      * @param flags to control database access mode
-     * @param errorHandler the {@link DatabaseErrorHandler} obj to be used to handle corruption
+     * @param errorHandler the {@link org.sqlite.database.DatabaseErrorHandler} obj to be used to handle corruption
      * when sqlite reports database corruption
      * @return the newly opened database
-     * @throws SQLiteException if the database cannot be opened
+     * @throws org.sqlite.database.sqlite.SQLiteException if the database cannot be opened
      */
     public static SQLiteDatabase openDatabase(String path, CursorFactory factory, int flags,
             DatabaseErrorHandler errorHandler) {
@@ -760,7 +758,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * Reopens the database in read-write mode.
      * If the database is already read-write, does nothing.
      *
-     * @throws SQLiteException if the database could not be reopened as requested, in which
+     * @throws org.sqlite.database.sqlite.SQLiteException if the database could not be reopened as requested, in which
      * case it remains open in read only mode.
      * @throws IllegalStateException if the database is not open.
      *
@@ -980,16 +978,16 @@ public final class SQLiteDatabase extends SQLiteClosable {
     /**
      * Compiles an SQL statement into a reusable pre-compiled statement object.
      * The parameters are identical to {@link #execSQL(String)}. You may put ?s in the
-     * statement and fill in those values with {@link SQLiteProgram#bindString}
-     * and {@link SQLiteProgram#bindLong} each time you want to run the
+     * statement and fill in those values with {@link org.sqlite.database.sqlite.SQLiteProgram#bindString}
+     * and {@link org.sqlite.database.sqlite.SQLiteProgram#bindLong} each time you want to run the
      * statement. Statements may not return result sets larger than 1x1.
      *<p>
-     * No two threads should be using the same {@link SQLiteStatement} at the same time.
+     * No two threads should be using the same {@link org.sqlite.database.sqlite.SQLiteStatement} at the same time.
      *
      * @param sql The raw SQL statement, may contain ? for unknown values to be
      *            bound later.
-     * @return A pre-compiled {@link SQLiteStatement} object. Note that
-     * {@link SQLiteStatement}s are not synchronized, see the documentation for more details.
+     * @return A pre-compiled {@link org.sqlite.database.sqlite.SQLiteStatement} object. Note that
+     * {@link org.sqlite.database.sqlite.SQLiteStatement}s are not synchronized, see the documentation for more details.
      */
     public SQLiteStatement compileStatement(String sql) throws SQLException {
         acquireReference();
@@ -1001,7 +999,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Query the given URL, returning a {@link Cursor} over the result set.
+     * Query the given URL, returning a {@link android.database.Cursor} over the result set.
      *
      * @param distinct true if you want each row to be unique, false otherwise.
      * @param table The table name to compile the query against.
@@ -1027,9 +1025,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *            default sort order, which may be unordered.
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
-     * @see Cursor
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
+     * @see android.database.Cursor
      */
     public Cursor query(boolean distinct, String table, String[] columns,
             String selection, String[] selectionArgs, String groupBy,
@@ -1039,7 +1037,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Query the given URL, returning a {@link Cursor} over the result set.
+     * Query the given URL, returning a {@link android.database.Cursor} over the result set.
      *
      * @param distinct true if you want each row to be unique, false otherwise.
      * @param table The table name to compile the query against.
@@ -1066,11 +1064,11 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
-     * If the operation is canceled, then {@link OperationCanceledException} will be thrown
+     * If the operation is canceled, then {@link org.sqlite.os.OperationCanceledException} will be thrown
      * when the query is executed.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
-     * @see Cursor
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
+     * @see android.database.Cursor
      */
     public Cursor query(boolean distinct, String table, String[] columns,
             String selection, String[] selectionArgs, String groupBy,
@@ -1080,7 +1078,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Query the given URL, returning a {@link Cursor} over the result set.
+     * Query the given URL, returning a {@link android.database.Cursor} over the result set.
      *
      * @param cursorFactory the cursor factory to use, or null for the default factory
      * @param distinct true if you want each row to be unique, false otherwise.
@@ -1107,9 +1105,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *            default sort order, which may be unordered.
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
-     * @see Cursor
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
+     * @see android.database.Cursor
      */
     public Cursor queryWithFactory(CursorFactory cursorFactory,
             boolean distinct, String table, String[] columns,
@@ -1120,7 +1118,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Query the given URL, returning a {@link Cursor} over the result set.
+     * Query the given URL, returning a {@link android.database.Cursor} over the result set.
      *
      * @param cursorFactory the cursor factory to use, or null for the default factory
      * @param distinct true if you want each row to be unique, false otherwise.
@@ -1148,11 +1146,11 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
-     * If the operation is canceled, then {@link OperationCanceledException} will be thrown
+     * If the operation is canceled, then {@link org.sqlite.os.OperationCanceledException} will be thrown
      * when the query is executed.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
-     * @see Cursor
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
+     * @see android.database.Cursor
      */
     public Cursor queryWithFactory(CursorFactory cursorFactory,
             boolean distinct, String table, String[] columns,
@@ -1171,7 +1169,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Query the given table, returning a {@link Cursor} over the result set.
+     * Query the given table, returning a {@link android.database.Cursor} over the result set.
      *
      * @param table The table name to compile the query against.
      * @param columns A list of which columns to return. Passing null will
@@ -1194,9 +1192,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @param orderBy How to order the rows, formatted as an SQL ORDER BY clause
      *            (excluding the ORDER BY itself). Passing null will use the
      *            default sort order, which may be unordered.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
-     * @see Cursor
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
+     * @see android.database.Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
             String[] selectionArgs, String groupBy, String having,
@@ -1207,7 +1205,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Query the given table, returning a {@link Cursor} over the result set.
+     * Query the given table, returning a {@link android.database.Cursor} over the result set.
      *
      * @param table The table name to compile the query against.
      * @param columns A list of which columns to return. Passing null will
@@ -1232,9 +1230,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *            default sort order, which may be unordered.
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
-     * @see Cursor
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
+     * @see android.database.Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
             String[] selectionArgs, String groupBy, String having,
@@ -1245,31 +1243,31 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Runs the provided SQL and returns a {@link Cursor} over the result set.
+     * Runs the provided SQL and returns a {@link android.database.Cursor} over the result set.
      *
      * @param sql the SQL query. The SQL string must not be ; terminated
      * @param selectionArgs You may include ?s in where clause in the query,
      *     which will be replaced by the values from selectionArgs. The
      *     values will be bound as Strings.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQuery(String sql, String[] selectionArgs) {
         return rawQueryWithFactory(null, sql, selectionArgs, null, null);
     }
 
     /**
-     * Runs the provided SQL and returns a {@link Cursor} over the result set.
+     * Runs the provided SQL and returns a {@link android.database.Cursor} over the result set.
      *
      * @param sql the SQL query. The SQL string must not be ; terminated
      * @param selectionArgs You may include ?s in where clause in the query,
      *     which will be replaced by the values from selectionArgs. The
      *     values will be bound as Strings.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
-     * If the operation is canceled, then {@link OperationCanceledException} will be thrown
+     * If the operation is canceled, then {@link org.sqlite.os.OperationCanceledException} will be thrown
      * when the query is executed.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQuery(String sql, String[] selectionArgs,
             CancellationSignal cancellationSignal) {
@@ -1285,8 +1283,8 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *     which will be replaced by the values from selectionArgs. The
      *     values will be bound as Strings.
      * @param editTable the name of the first table, which is editable
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQueryWithFactory(
             CursorFactory cursorFactory, String sql, String[] selectionArgs,
@@ -1304,10 +1302,10 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *     values will be bound as Strings.
      * @param editTable the name of the first table, which is editable
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
-     * If the operation is canceled, then {@link OperationCanceledException} will be thrown
+     * If the operation is canceled, then {@link org.sqlite.os.OperationCanceledException} will be thrown
      * when the query is executed.
-     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
-     * {@link Cursor}s are not synchronized, see the documentation for more details.
+     * @return A {@link android.database.Cursor} object, which is positioned before the first entry. Note that
+     * {@link android.database.Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQueryWithFactory(
             CursorFactory cursorFactory, String sql, String[] selectionArgs,
@@ -1362,7 +1360,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @param values this map contains the initial column values for the
      *            row. The keys should be the column names and the values the
      *            column values
-     * @throws SQLException
+     * @throws org.sqlite.database.SQLException
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
     public long insertOrThrow(String table, String nullColumnHack, ContentValues values)
@@ -1408,7 +1406,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *            in the case where your <code>initialValues</code> is empty.
      * @param initialValues this map contains the initial column values for
      *   the row. The key
-     * @throws SQLException
+     * @throws org.sqlite.database.SQLException
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
     public long replaceOrThrow(String table, String nullColumnHack,
@@ -1604,8 +1602,8 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * or any other SQL statement that returns data.
      * <p>
      * It has no means to return any data (such as the number of affected rows).
-     * Instead, you're encouraged to use {@link #insert(String, String, ContentValues)},
-     * {@link #update(String, ContentValues, String, String[])}, et al, when possible.
+     * Instead, you're encouraged to use {@link #insert(String, String, android.content.ContentValues)},
+     * {@link #update(String, android.content.ContentValues, String, String[])}, et al, when possible.
      * </p>
      * <p>
      * When using {@link #enableWriteAheadLogging()}, journal_mode is
@@ -1616,7 +1614,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *
      * @param sql the SQL statement to be executed. Multiple statements separated by semicolons are
      * not supported.
-     * @throws SQLException if the SQL string is invalid
+     * @throws org.sqlite.database.SQLException if the SQL string is invalid
      */
     public void execSQL(String sql) throws SQLException {
         executeSql(sql, null);
@@ -1627,15 +1625,15 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * <p>
      * For INSERT statements, use any of the following instead.
      * <ul>
-     *   <li>{@link #insert(String, String, ContentValues)}</li>
-     *   <li>{@link #insertOrThrow(String, String, ContentValues)}</li>
-     *   <li>{@link #insertWithOnConflict(String, String, ContentValues, int)}</li>
+     *   <li>{@link #insert(String, String, android.content.ContentValues)}</li>
+     *   <li>{@link #insertOrThrow(String, String, android.content.ContentValues)}</li>
+     *   <li>{@link #insertWithOnConflict(String, String, android.content.ContentValues, int)}</li>
      * </ul>
      * <p>
      * For UPDATE statements, use any of the following instead.
      * <ul>
-     *   <li>{@link #update(String, ContentValues, String, String[])}</li>
-     *   <li>{@link #updateWithOnConflict(String, ContentValues, String, String[], int)}</li>
+     *   <li>{@link #update(String, android.content.ContentValues, String, String[])}</li>
+     *   <li>{@link #updateWithOnConflict(String, android.content.ContentValues, String, String[], int)}</li>
      * </ul>
      * <p>
      * For DELETE statements, use any of the following instead.
@@ -1663,7 +1661,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @param sql the SQL statement to be executed. Multiple statements separated by semicolons are
      * not supported.
      * @param bindArgs only byte[], String, Long and Double are supported in bindArgs.
-     * @throws SQLException if the SQL string is invalid
+     * @throws org.sqlite.database.SQLException if the SQL string is invalid
      */
     public void execSQL(String sql, Object[] bindArgs) throws SQLException {
         if (bindArgs == null) {
@@ -1741,7 +1739,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * Returns true if the new version code is greater than the current database version.
      *
      * @param newVersion The new version code.
-     * @return True if the new version code is greater than the current database version. 
+     * @return True if the new version code is greater than the current database version.
      */
     public boolean needUpgrade(int newVersion) {
         return newVersion > getVersion();
@@ -1764,7 +1762,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      *
      * @param locale The new locale.
      *
-     * @throws SQLException if the locale could not be set.  The most common reason
+     * @throws org.sqlite.database.SQLException if the locale could not be set.  The most common reason
      * for this is that there is no collator available for the locale you requested.
      * In this case the database remains unchanged.
      */
@@ -1829,7 +1827,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * key constraints are enabled for the session.
      * </p><p>
      * A good time to call this method is right after calling {@link #openOrCreateDatabase}
-     * or in the {@link SQLiteOpenHelper#onConfigure} callback.
+     * or in the {@link org.sqlite.database.sqlite.SQLiteOpenHelper#onConfigure} callback.
      * </p><p>
      * When foreign key constraints are disabled, the database does not check whether
      * changes to the database will violate foreign key constraints.  Likewise, when
@@ -1902,7 +1900,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * transaction was begun.
      * </p><p>
      * Writers should use {@link #beginTransactionNonExclusive()} or
-     * {@link #beginTransactionWithListenerNonExclusive(SQLiteTransactionListener)}
+     * {@link #beginTransactionWithListenerNonExclusive(org.sqlite.database.sqlite.SQLiteTransactionListener)}
      * to start a transaction.  Non-exclusive mode allows database file to be in readable
      * by other threads executing queries.
      * </p><p>
@@ -2189,15 +2187,15 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Used to allow returning sub-classes of {@link Cursor} when calling query.
+     * Used to allow returning sub-classes of {@link android.database.Cursor} when calling query.
      */
     public interface CursorFactory {
         /**
-         * See {@link SQLiteCursor#SQLiteCursor(SQLiteCursorDriver, String, SQLiteQuery)}.
+         * See {@link org.sqlite.database.sqlite.SQLiteCursor#SQLiteCursor(org.sqlite.database.sqlite.SQLiteCursorDriver, String, org.sqlite.database.sqlite.SQLiteQuery)}.
          */
         public Cursor newCursor(SQLiteDatabase db,
-                SQLiteCursorDriver masterQuery, String editTable,
-                SQLiteQuery query);
+                                SQLiteCursorDriver masterQuery, String editTable,
+                                SQLiteQuery query);
     }
 
     /**

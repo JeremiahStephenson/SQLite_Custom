@@ -19,38 +19,16 @@
 */
 
 package org.sqlite.database;
+
 import android.database.Cursor;
-import android.database.CursorWindow;
+
+import org.sqlite.database.sqlite.SQLiteDatabase;
+import org.sqlite.database.sqlite.SQLiteStatement;
 
 /* import org.apache.commons.codec.binary.Hex; */
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.OperationApplicationException;
-import org.sqlite.database.sqlite.SQLiteAbortException;
-import org.sqlite.database.sqlite.SQLiteConstraintException;
-import org.sqlite.database.sqlite.SQLiteDatabase;
-import org.sqlite.database.sqlite.SQLiteDatabaseCorruptException;
-import org.sqlite.database.sqlite.SQLiteDiskIOException;
-import org.sqlite.database.sqlite.SQLiteException;
-import org.sqlite.database.sqlite.SQLiteFullException;
-import org.sqlite.database.sqlite.SQLiteProgram;
-import org.sqlite.database.sqlite.SQLiteStatement;
-import android.os.OperationCanceledException;
-import android.os.Parcel;
-import android.os.ParcelFileDescriptor;
-import android.text.TextUtils;
-import android.util.Log;
-
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.text.Collator;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
 /**
- * Static utility methods for dealing with databases and {@link Cursor}s.
+ * Static utility methods for dealing with databases and {@link android.database.Cursor}s.
  */
 public class ExtraUtils {
     private static final String TAG = "ExtraUtils";
@@ -69,7 +47,7 @@ public class ExtraUtils {
     }
 
     /**
-     * Picks a start position for {@link Cursor#fillWindow} such that the
+     * Picks a start position for {@link android.database.Cursor#fillWindow} such that the
      * window will contain the requested row and a useful range of rows
      * around it.
      *
@@ -99,11 +77,11 @@ public class ExtraUtils {
      *<p>
      * Returned values are
      * <ul>
-     *   <li>{@link Cursor#FIELD_TYPE_NULL}</li>
-     *   <li>{@link Cursor#FIELD_TYPE_INTEGER}</li>
-     *   <li>{@link Cursor#FIELD_TYPE_FLOAT}</li>
-     *   <li>{@link Cursor#FIELD_TYPE_STRING}</li>
-     *   <li>{@link Cursor#FIELD_TYPE_BLOB}</li>
+     *   <li>{@link android.database.Cursor#FIELD_TYPE_NULL}</li>
+     *   <li>{@link android.database.Cursor#FIELD_TYPE_INTEGER}</li>
+     *   <li>{@link android.database.Cursor#FIELD_TYPE_FLOAT}</li>
+     *   <li>{@link android.database.Cursor#FIELD_TYPE_STRING}</li>
+     *   <li>{@link android.database.Cursor#FIELD_TYPE_BLOB}</li>
      *</ul>
      *</p>
      *
