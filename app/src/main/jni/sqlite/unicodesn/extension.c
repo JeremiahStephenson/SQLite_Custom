@@ -11,8 +11,8 @@
 ******************************************************************************
 **
 */
-#include <sqlite3.h>
-#include <sqlite3ext.h>
+#include "../sqlite3.h"
+#include "../sqlite3ext.h"
 #include <android/log.h>
 
 #include "fts3_unicodesn.h"

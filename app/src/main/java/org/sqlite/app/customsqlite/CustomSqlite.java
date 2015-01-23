@@ -373,14 +373,12 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        try {
-            db.execSQL("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
-        } catch (Exception exp) {
-            exp.printStackTrace();
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
+        if (load == null || !load.moveToFirst()) {
+            throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        //db.execSQL("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=unicodesn)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=unicodesn \"stemmer=russian\")");
 
         final String[] names = getResources().getStringArray(R.array.dummy_names);
 
@@ -388,10 +386,12 @@ public class CustomSqlite extends Activity {
             db.execSQL("INSERT INTO v1 VALUES ('" + name + "')");
         }
 
-        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"Joanna"});
+        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"Жопа"});
 
         if (c != null && c.moveToFirst()) {
             testResult("fts_text_1.0", String.valueOf(c.getCount()), "1");
+        } else {
+            testResult("fts_text_1.0", "0", "1");
         }
 
         if (c != null) {
@@ -403,6 +403,7 @@ public class CustomSqlite extends Activity {
 
     private void runTheTests() {
         System.loadLibrary("sqliteX");
+        System.loadLibrary("unicodesn");
         DB_PATH = getApplicationContext().getDatabasePath("test.db");
         DB_PATH.mkdirs();
 
@@ -418,12 +419,12 @@ public class CustomSqlite extends Activity {
             public Object call() throws Exception {
                 try {
                     reportVersion();
-//                    csrTest1();
-//                    csrTest2();
-//                    threadTest1();
-//                    threadTest2();
-//                    seeTest1();
-//                    seeTest2();
+                    csrTest1();
+                    csrTest2();
+                    threadTest1();
+                    threadTest2();
+                    seeTest1();
+                    seeTest2();
                     ftsTest1();
                     return null;
                 } catch(Exception e) {

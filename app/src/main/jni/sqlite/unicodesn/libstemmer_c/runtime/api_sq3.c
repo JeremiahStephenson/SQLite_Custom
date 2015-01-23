@@ -1,7 +1,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <sqlite3.h> /* for calloc, free */
+#include "../../../sqlite3.h" /* for calloc, free */
 #include "header.h"
 
 static void *local_calloc(size_t nmemb, size_t size) {

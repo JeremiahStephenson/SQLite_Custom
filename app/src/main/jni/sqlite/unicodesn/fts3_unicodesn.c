@@ -16,7 +16,7 @@
 #include "fts3_unicodesn.h"
 
 /* Snowball stemmer */
-#include "api.h"
+#include "libstemmer_c/runtime/api.h"
 
 #ifdef SQLITE_ENABLE_FTS4_UNICODE61
 
@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <android/log.h>
 
 #include "fts3_tokenizer.h"
 

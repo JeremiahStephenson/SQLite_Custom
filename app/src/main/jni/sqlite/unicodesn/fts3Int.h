@@ -14,7 +14,7 @@
 #ifndef _FTSINT_H
 #define _FTSINT_H
 
-#include "sqlite3.h"
+#include "../sqlite3.h"
 #include "fts3_tokenizer.h"
 
 typedef unsigned char u8;         /* 1-byte (or larger) unsigned integer */
