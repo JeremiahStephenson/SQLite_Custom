@@ -339,7 +339,7 @@ int sqlite3_rekey_v2(sqlite3 *db, const char *zDbName, const void *zKey, int nKe
   {
     /* Rollback in case of error */
 #if (SQLITE_VERSION_NUMBER >= 3007011)
-    sqlite3BtreeRollback(pbt, SQLITE_OK);
+    sqlite3BtreeRollback(pbt, SQLITE_OK, 0);
 #else
     sqlite3BtreeRollback(pbt);
 #endif
