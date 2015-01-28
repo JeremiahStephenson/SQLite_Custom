@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -373,7 +374,8 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
+        //final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libunicodesn"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
@@ -401,6 +403,109 @@ public class CustomSqlite extends Activity {
         db.close();
     }
 
+    private void ftsTest2() throws Exception {
+        SQLiteDatabase.deleteDatabase(DB_PATH);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
+
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_character"});
+        if (load == null || !load.moveToFirst()) {
+            throw new RuntimeException("Unicode Extension load failed!");
+        }
+
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=character)");
+
+        final String[] names = getResources().getStringArray(R.array.html);
+
+        for (String name : names) {
+            db.execSQL("INSERT INTO v1 VALUES ('" + name + "')");
+        }
+
+        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"body"});
+
+        if (c != null && c.moveToFirst()) {
+            testResult("fts_text_2.0", String.valueOf(c.getCount()), "0");
+        } else {
+            testResult("fts_text_2.0", "NULL", "0");
+        }
+
+        if (c != null) {
+            c.close();
+        }
+
+        db.close();
+    }
+
+    private void ftsTest3() throws Exception {
+        SQLiteDatabase.deleteDatabase(DB_PATH);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
+
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_character"});
+        if (load == null || !load.moveToFirst()) {
+            throw new RuntimeException("Unicode Extension load failed!");
+        }
+
+        db.execSQL("CREATE VIRTUAL TABLE Book USING fts3(name TEXT NOT NULL, author TEXT, tokenize=character)");
+
+        db.execSQL("INSERT INTO Book VALUES('Biography of Barenziah, v1', 'Stern Gamboge')");
+        db.execSQL("INSERT INTO Book VALUES('Biography of Barenziah, v2', 'Stern Gamboge')");
+        db.execSQL("INSERT INTO Book VALUES('Biography of Barenziah, v3', 'Stern Gamboge')");
+        db.execSQL("INSERT INTO Book VALUES('The Alduin-Akatosh Dichotomy', 'Alexandre Simon')");
+        db.execSQL("INSERT INTO Book VALUES('The Legendary Sancre Tor', 'Matera Chapel')");
+        db.execSQL("INSERT INTO Book VALUES('The Legendary Scourge, v3', 'Marobar Sul')");
+
+        Cursor c = db.rawQuery("SELECT * FROM Book WHERE Book MATCH ?", new String[]{"\"end\""});
+
+        if (c != null && c.moveToFirst()) {
+            testResult("fts_text_3.0", String.valueOf(c.getCount()), "1");
+
+            do {
+                Log.d("Book Test", c.getString(c.getColumnIndex("name")));
+            } while (c.moveToNext());
+
+        } else {
+            testResult("fts_text_3.0", "0", "1");
+        }
+
+        if (c != null) {
+            c.close();
+        }
+
+        db.close();
+    }
+
+    private void ftsTest4() throws Exception {
+        SQLiteDatabase.deleteDatabase(DB_PATH);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
+
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_character"});
+        if (load == null || !load.moveToFirst()) {
+            throw new RuntimeException("Unicode Extension load failed!");
+        }
+
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=character)");
+
+        db.execSQL("INSERT INTO v1 VALUES('Adrenalines')");
+        db.execSQL("INSERT INTO v1 VALUES('Linux')");
+        db.execSQL("INSERT INTO v1 VALUES('Penicillin')");
+        db.execSQL("INSERT INTO v1 VALUES('Burp')");
+        db.execSQL("INSERT INTO v1 VALUES('Fart')");
+        db.execSQL("INSERT INTO v1 VALUES('Sneeze')");
+
+        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"lin"});
+
+        if (c != null && c.moveToFirst()) {
+            testResult("fts_text_4.0", String.valueOf(c.getCount()), "1");
+        } else {
+            testResult("fts_text_4.0", "0", "1");
+        }
+
+        if (c != null) {
+            c.close();
+        }
+
+        db.close();
+    }
+
     private void runTheTests() {
         System.loadLibrary("sqliteX");
         System.loadLibrary("unicodesn");
@@ -419,13 +524,16 @@ public class CustomSqlite extends Activity {
             public Object call() throws Exception {
                 try {
                     reportVersion();
-                    csrTest1();
-                    csrTest2();
-                    threadTest1();
-                    threadTest2();
-                    seeTest1();
-                    seeTest2();
-                    ftsTest1();
+//                    csrTest1();
+//                    csrTest2();
+//                    threadTest1();
+//                    threadTest2();
+//                    seeTest1();
+//                    seeTest2();
+                    //ftsTest1();
+                    ftsTest2();
+                    ftsTest3();
+                    ftsTest4();
                     return null;
                 } catch(Exception e) {
                     appendString("Exception: " + e.toString() + "\n");

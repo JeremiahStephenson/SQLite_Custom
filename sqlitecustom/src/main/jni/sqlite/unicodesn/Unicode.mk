@@ -4,6 +4,7 @@ include $(CLEAR_VARS)
 
 # If using SEE, uncomment the following:
 LOCAL_CFLAGS += -DSQLITE_HAS_CODEC
+LOCAL_CFLAGS += -std=c99
 
 LOCAL_CFLAGS += -DHAVE_CONFIG_H -DKHTML_NO_EXCEPTIONS -DGKWQ_NO_JAVA
 LOCAL_CFLAGS += -DNO_SUPPORT_JS_BINDING -DQT_NO_WHEELEVENT -DKHTML_NO_XBL
@@ -66,9 +67,12 @@ LOCAL_SRC_FILES += libstemmer_c/src_c/stem_UTF_8_spanish.c
 LOCAL_SRC_FILES += libstemmer_c/src_c/stem_UTF_8_swedish.c
 LOCAL_SRC_FILES += libstemmer_c/src_c/stem_UTF_8_turkish.c
 
+LOCAL_SRC_FILES += character/character_tokenizer.c
+
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/nativehelper/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer_c/runtime/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer_c/src_c/
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/character/
 
 LOCAL_MODULE:= unicodesn
 LOCAL_SHARED_LIBRARIES := libsqliteX

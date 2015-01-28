@@ -5,7 +5,7 @@
     <string-array name="dummy_names">
         <item>Bobbye</item>
         <item>Claudie</item>
-        <item>Gracia</item>
+        <item>Gracias</item>
         <item>Kalyn</item>
         <item>Dani</item>
         <item>Keitha</item>
@@ -54,6 +54,10 @@
         <item>Alfreda</item>
         <item>Dillon</item>
         <item>Margo</item>
+    </string-array>
+
+    <string-array name="html">
+        <item>&lt;html>&lt;body>&lt;h1>My First Heading&lt;/h1>&lt;p>My first paragraph.&lt;/p>&lt;/body>&lt;/html></item>
     </string-array>
 
 </resources>
