@@ -1,7 +1,7 @@
 //
 //  character_tokenizer.c
 //
-//  Created by Hai Feng Kao on 4/6/13.
+//  Created by Jeremiah Stephenson on 1/29/15.
 //  All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,28 +27,30 @@
 #include "../../sqlite3.h"
 #include <ctype.h> //for tolower
 #include <string.h> //for memset
-#include "character_tokenizer.h"
+#include "xml_tokenizer.h"
 
 #include <android/log.h>
 #include <stdio.h>
+#include <ctype.h>
+#include <stdbool.h>
 
-typedef struct character_tokenizer {
+typedef struct xml_tokenizer {
     sqlite3_tokenizer base;
-} character_tokenizer;
+} xml_tokenizer;
 
-typedef struct character_tokenizer_cursor {
+typedef struct xml_tokenizer_cursor {
     sqlite3_tokenizer_cursor base;
     const char *pInput; // input we are tokenizing
     int nBytes;         // size of the input
     int iPosition;      // current position in pInput
     int iToken;         // index of next token to be returned
     char *pToken;       // storage for current token
-} character_tokenizer_cursor;
+} xml_tokenizer_cursor;
 
-static int characterCreate(int argc, const char * const *argv, sqlite3_tokenizer **ppTokenizer) {
+static int xmlCreate(int argc, const char * const *argv, sqlite3_tokenizer **ppTokenizer) {
 
-    character_tokenizer *t;
-    t = (character_tokenizer *) sqlite3_malloc(sizeof(*t));
+    xml_tokenizer *t;
+    t = (xml_tokenizer *) sqlite3_malloc(sizeof(*t));
     if (t == NULL) {
         return SQLITE_NOMEM;
     }
@@ -58,25 +60,25 @@ static int characterCreate(int argc, const char * const *argv, sqlite3_tokenizer
     return SQLITE_OK;
 }
 
-static int characterDestroy(sqlite3_tokenizer *pTokenizer) {
+static int xmlDestroy(sqlite3_tokenizer *pTokenizer) {
 
     sqlite3_free(pTokenizer);
     return SQLITE_OK;
 }
 
-static int characterOpen(
+static int xmlOpen(
                    sqlite3_tokenizer *pTokenizer,         /* The tokenizer */
                    const char *pInput, int nBytes,        /* String to be tokenized */
                    sqlite3_tokenizer_cursor **ppCursor    /* OUT: Tokenization cursor */
                    ) {
 
-    character_tokenizer_cursor *c;
+    xml_tokenizer_cursor *c;
     if (pInput == 0) {
         nBytes = 0;
     } else if (nBytes < 0) {
         nBytes = (int)strlen(pInput);
     }
-    c = (character_tokenizer_cursor *) sqlite3_malloc(sizeof(*c));
+    c = (xml_tokenizer_cursor *) sqlite3_malloc(sizeof(*c));
     if (c == NULL) {
         return SQLITE_NOMEM;
     }
@@ -88,9 +90,9 @@ static int characterOpen(
     return SQLITE_OK;
 }
 
-static int characterClose(sqlite3_tokenizer_cursor *pCursor) {
+static int xmlClose(sqlite3_tokenizer_cursor *pCursor) {
 
-    character_tokenizer_cursor *c = (character_tokenizer_cursor *) pCursor;
+    xml_tokenizer_cursor *c = (xml_tokenizer_cursor *) pCursor;
     
     if (c->pToken != NULL){
         sqlite3_free(c->pToken);
@@ -101,7 +103,7 @@ static int characterClose(sqlite3_tokenizer_cursor *pCursor) {
     return SQLITE_OK;
 }
 
-static int characterNext(
+static int xmlNext(
                    sqlite3_tokenizer_cursor *pCursor, /* Cursor returned by cusOpen */
                    const char **ppToken,               /* OUT: *ppToken is the token text */
                    int *pnBytes,                       /* OUT: Number of bytes in token */
@@ -110,9 +112,7 @@ static int characterNext(
                    int *piPosition                     /* OUT: Position integer of token */
                    ) {
 
-    //__android_log_print(ANDROID_LOG_VERBOSE, "Character Token Test", "The value is %s", *ppToken);
-
-    character_tokenizer_cursor *c = (character_tokenizer_cursor *) pCursor;
+    xml_tokenizer_cursor *c = (xml_tokenizer_cursor *) pCursor;
     if (c->pToken != NULL) {
         sqlite3_free(c->pToken);
         c->pToken = NULL;
@@ -122,19 +122,40 @@ static int characterNext(
         return SQLITE_DONE;
     }
     
-    int length = 1; // the size of current character, which can be at most 4 bytes
-    
+    int length = 0; // the size of current xml, which can be at most 4 bytes
+
+    //__android_log_print(ANDROID_LOG_VERBOSE, "xml Token Test", "%s", c->pInput);
+
     const char* token = &(c->pInput[c->iPosition]);
     *piStartOffset = c->iPosition;
-    
+
+    int offset = 0;
+    bool inside = false;
+
     // find the beginning of next utf8 character
-    c->iPosition++;
+    //c->iPosition++;
     while (c->iPosition < c->nBytes) {
         char byte = c->pInput[c->iPosition];
-        if (((byte & 0x80) == 0) || ((byte & 0xc0) == 0xc0)) {
-            // we have reached the first byte of next utf8 character
+
+        if (isspace(byte) || byte == 0x3C || byte == 0x3E || inside) {
+            c->iPosition++;
+
+            if (byte == 0x3C) {
+                __android_log_print(ANDROID_LOG_VERBOSE, "xml Token Test", "Inside: %c", byte);
+                inside = true;
+            } else if (byte == 0x3E) {
+                __android_log_print(ANDROID_LOG_VERBOSE, "xml Token Test", "Outside: %c", byte);
+                inside = false;
+            }
+
+            if (length == 0) {
+                offset++;
+                continue;
+            }
+
             break;
         }
+
         length++;
         c->iPosition++;
     }
@@ -145,12 +166,14 @@ static int characterNext(
     }
     
     c->pToken[length] = 0;
-    memcpy(c->pToken, token, length);
+    memcpy(c->pToken, token + offset, length);
     
     for (int i = 0; i < length; ++i) {
         unsigned char byte = c->pToken[i];
 
-        if (byte < 0x80) {
+        //__android_log_print(ANDROID_LOG_VERBOSE, "xml Token Test", "%c", byte);
+
+        if (!isspace(byte) && !(byte == 0x3C) && !(byte == 0x3E)) {
             // ascii character, make it case-insensitive
             c->pToken[i] = tolower(byte);
         }
@@ -162,18 +185,20 @@ static int characterNext(
     *piEndOffset = *piStartOffset+length;
     *piPosition = c->iToken++;
 
+    __android_log_print(ANDROID_LOG_VERBOSE, "xml Token Test", "%s, %i, %i, %i, %i", c->pToken, *pnBytes, *piStartOffset, *piEndOffset, *piPosition);
+
     return SQLITE_OK;
 }
 
-static const sqlite3_tokenizer_module characterTokenizerModule = {
+static const sqlite3_tokenizer_module xmlTokenizerModule = {
     0, // version number
-    characterCreate,
-    characterDestroy,
-    characterOpen,
-    characterClose,
-    characterNext,
+    xmlCreate,
+    xmlDestroy,
+    xmlOpen,
+    xmlClose,
+    xmlNext,
 };
 
-void get_character_tokenizer_module(const sqlite3_tokenizer_module **ppModule){
-    *ppModule = &characterTokenizerModule;
+void get_xml_tokenizer_module(const sqlite3_tokenizer_module **ppModule){
+    *ppModule = &xmlTokenizerModule;
 }

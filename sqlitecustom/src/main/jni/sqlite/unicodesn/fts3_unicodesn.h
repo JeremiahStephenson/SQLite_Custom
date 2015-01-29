@@ -5,6 +5,7 @@
 
 #define TOKENIZER_NAME	"unicodesn"
 #define CHARACTER_NAME  "character"
+#define XML_NAME  "xml"
 
 #define UNICODE0_DLL_EXPORTED __attribute__((__visibility__("default")))
 
@@ -19,6 +20,12 @@ UNICODE0_DLL_EXPORTED int sqlite3_extension_init(
       );
 
 UNICODE0_DLL_EXPORTED int sqlite3_extension_init_character(
+    sqlite3 *db,          /* The database connection */
+    char **pzErrMsg,      /* Write error messages here */
+    const struct sqlite3_api_routines *pApi  /* API methods */
+    );
+
+UNICODE0_DLL_EXPORTED int sqlite3_extension_init_xml(
     sqlite3 *db,          /* The database connection */
     char **pzErrMsg,      /* Write error messages here */
     const struct sqlite3_api_routines *pApi  /* API methods */

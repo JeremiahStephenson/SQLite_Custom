@@ -477,24 +477,33 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_character"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_xml"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=character)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=xml)");
 
-        db.execSQL("INSERT INTO v1 VALUES('Adrenalines')");
-        db.execSQL("INSERT INTO v1 VALUES('Linux')");
-        db.execSQL("INSERT INTO v1 VALUES('Penicillin')");
-        db.execSQL("INSERT INTO v1 VALUES('Burp')");
-        db.execSQL("INSERT INTO v1 VALUES('Fart')");
-        db.execSQL("INSERT INTO v1 VALUES('Sneeze')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Adrenaline <b>Junkies</b> Unite</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Linux Nerds Reunion</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Penicillin Users Assemble</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Burp Man Returns</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Fart Hero Stinks</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Sneeze Scars Message</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Leian Solo Falls</html>')");
 
-        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"lin"});
+//        db.execSQL("INSERT INTO v1 VALUES('Adrenaline Junkies Unite')");
+//        db.execSQL("INSERT INTO v1 VALUES('Linux Nerds Reunion')");
+//        db.execSQL("INSERT INTO v1 VALUES('Penicillin Users Assemble')");
+//        db.execSQL("INSERT INTO v1 VALUES('Burp Man Returns')");
+//        db.execSQL("INSERT INTO v1 VALUES('Fart Hero Stinks')");
+//        db.execSQL("INSERT INTO v1 VALUES('Sneeze Scars Message')");
+//        db.execSQL("INSERT INTO v1 VALUES('Leian Solo Falls')");
+
+        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"\"adrenaline\""});
 
         if (c != null && c.moveToFirst()) {
-            testResult("fts_text_4.0", String.valueOf(c.getCount()), "1");
+            testResult("fts_text_4.0", String.valueOf(c.getCount()), "3");
         } else {
             testResult("fts_text_4.0", "0", "1");
         }
@@ -531,8 +540,8 @@ public class CustomSqlite extends Activity {
 //                    seeTest1();
 //                    seeTest2();
                     //ftsTest1();
-                    ftsTest2();
-                    ftsTest3();
+                    //ftsTest2();
+                    //ftsTest3();
                     ftsTest4();
                     return null;
                 } catch(Exception e) {

@@ -17,8 +17,9 @@
 
 #include "fts3_unicodesn.h"
 #include "character/character_tokenizer.h"
+#include "xml/xml_tokenizer.h"
 
-#define APPNAME "CustomSQLTest"
+#define APPNAME "CustomSQL"
 
 SQLITE_EXTENSION_INIT1
 
@@ -81,6 +82,23 @@ int sqlite3_extension_init_character(
    get_character_tokenizer_module(&tokenizer);
 
    registerTokenizer(db, CHARACTER_NAME, tokenizer);
+
+   return 0;
+}
+
+int sqlite3_extension_init_xml(
+      sqlite3 *db,          /* The database connection */
+      char **pzErrMsg,      /* Write error messages here */
+      const sqlite3_api_routines *pApi  /* API methods */
+      )
+{
+   const sqlite3_tokenizer_module *tokenizer;
+
+   SQLITE_EXTENSION_INIT2(pApi)
+
+   get_xml_tokenizer_module(&tokenizer);
+
+   registerTokenizer(db, XML_NAME, tokenizer);
 
    return 0;
 }
