@@ -17,14 +17,14 @@
 
 #include "unicodesn/fts3_unicodesn.h"
 #include "character/character_tokenizer.h"
-#include "html/fts3_html_tokenizer.h"
+#include "html/fts3_html_tokenizer_main.h"
 
 SQLITE_EXTENSION_INIT1
 
 /*
 ** Register a tokenizer implementation with FTS3 or FTS4.
 */
-static int registerTokenizer(
+static int registerExtensionTokenizer(
   sqlite3 *db,
   char *zName,
   const sqlite3_tokenizer_module *p
@@ -60,9 +60,9 @@ int sqlite3_extension_init(
 
    SQLITE_EXTENSION_INIT2(pApi)
 
-   sqlite3Fts3UnicodeSnTokenizer(&tokenizer);
+   sqlite3Fts3UnicodeTokenizer(&tokenizer);
 
-   registerTokenizer(db, TOKENIZER_NAME, tokenizer);
+   registerExtensionTokenizer(db, HTML_NAME, tokenizer);
 
    return 0;
 }
@@ -79,12 +79,12 @@ int sqlite3_extension_init_character(
 
    get_character_tokenizer_module(&tokenizer);
 
-   registerTokenizer(db, CHARACTER_NAME, tokenizer);
+   registerExtensionTokenizer(db, CHARACTER_NAME, tokenizer);
 
    return 0;
 }
 
-int sqlite3_extension_init_html(
+int sqlite3_extension_init_unicodesn(
       sqlite3 *db,          /* The database connection */
       char **pzErrMsg,      /* Write error messages here */
       const sqlite3_api_routines *pApi  /* API methods */
@@ -94,9 +94,9 @@ int sqlite3_extension_init_html(
 
    SQLITE_EXTENSION_INIT2(pApi)
 
-   get_html_tokenizer_module(&tokenizer);
+   sqlite3Fts3UnicodeSnTokenizer(&tokenizer);
 
-   registerTokenizer(db, HTML_NAME, tokenizer);
+   registerExtensionTokenizer(db, TOKENIZER_NAME, tokenizer);
 
    return 0;
 }

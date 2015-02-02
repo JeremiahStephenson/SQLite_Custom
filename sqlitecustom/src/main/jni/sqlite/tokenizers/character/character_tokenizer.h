@@ -26,7 +26,7 @@
 #ifndef SQLITE_CHARACTERTOKENIZER_H
 #define SQLITE_CHARACTERTOKENIZER_H
 
-#include "../fts3_tokenizer.h"
+#include "../../fts3_tokenizer.h"
 
 #define CHARACTER_NAME  "character"
 

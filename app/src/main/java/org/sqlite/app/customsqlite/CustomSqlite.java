@@ -374,7 +374,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
         //final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
-        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libunicodesn"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_unicodesn"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
@@ -406,7 +406,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_html"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libunicodesn"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
@@ -471,7 +471,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_html"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libunicodesn"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }

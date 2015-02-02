@@ -20,7 +20,7 @@
 
 #ifdef SQLITE_ENABLE_FTS4_UNICODE61
 
-#include "../fts3Int.h"
+#include "../../fts3Int.h"
 #if !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_FTS3)
 
 #include <assert.h>
@@ -29,7 +29,7 @@
 #include <string.h>
 #include <android/log.h>
 
-#include "../fts3_tokenizer.h"
+#include "../../fts3_tokenizer.h"
 
 /*
 ** The following two macros - READ_UTF8 and WRITE_UTF8 - have been copied
@@ -236,7 +236,7 @@ static int unicodeSetStemmer(
   }
 #ifdef WITH_STEMMER_danish
   else if ( nIn==6 &&  memcmp("danish", zIn, 6)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_danish.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_danish.h"
      p->stemmer.create = danish_UTF_8_create_env;
      p->stemmer.close = danish_UTF_8_close_env;
      p->stemmer.stem = danish_UTF_8_stem;
@@ -244,7 +244,7 @@ static int unicodeSetStemmer(
 #endif
 #ifdef WITH_STEMMER_dutch
   else if ( nIn==5 &&  memcmp("dutch", zIn, 5)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_dutch.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_dutch.h"
      p->stemmer.create = dutch_UTF_8_create_env;
      p->stemmer.close = dutch_UTF_8_close_env;
      p->stemmer.stem = dutch_UTF_8_stem;
@@ -252,7 +252,7 @@ static int unicodeSetStemmer(
 #endif 
 #ifdef WITH_STEMMER_english
   else if ( nIn==7 &&  memcmp("english", zIn, 7)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_english.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_english.h"
      p->stemmer.create = english_UTF_8_create_env;
      p->stemmer.close = english_UTF_8_close_env;
      p->stemmer.stem = english_UTF_8_stem;
@@ -260,7 +260,7 @@ static int unicodeSetStemmer(
 #endif
 #ifdef WITH_STEMMER_finnish
   else if ( nIn==7 &&  memcmp("finnish", zIn, 7)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_finnish.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_finnish.h"
      p->stemmer.create = finnish_UTF_8_create_env;
      p->stemmer.close = finnish_UTF_8_close_env;
      p->stemmer.stem = finnish_UTF_8_stem;
@@ -268,7 +268,7 @@ static int unicodeSetStemmer(
 #endif
 #ifdef WITH_STEMMER_french
   else if ( nIn==6 &&  memcmp("french", zIn, 6)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_french.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_french.h"
      p->stemmer.create = french_UTF_8_create_env;
      p->stemmer.close = french_UTF_8_close_env;
      p->stemmer.stem = french_UTF_8_stem;
@@ -276,7 +276,7 @@ static int unicodeSetStemmer(
 #endif
 #ifdef WITH_STEMMER_german
   else if ( nIn==6 &&  memcmp("german", zIn, 6)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_german.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_german.h"
      p->stemmer.create = german_UTF_8_create_env;
      p->stemmer.close = german_UTF_8_close_env;
      p->stemmer.stem = german_UTF_8_stem;
@@ -284,7 +284,7 @@ static int unicodeSetStemmer(
 #endif
 #ifdef WITH_STEMMER_hungarian
   else if ( nIn==9 &&  memcmp("hungarian", zIn, 9)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_hungarian.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_hungarian.h"
      p->stemmer.create = hungarian_UTF_8_create_env;
      p->stemmer.close = hungarian_UTF_8_close_env;
      p->stemmer.stem = hungarian_UTF_8_stem;
@@ -292,7 +292,7 @@ static int unicodeSetStemmer(
 #endif
 #ifdef WITH_STEMMER_italian
 else if ( nIn==7 &&  memcmp("italian", zIn, 7)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_italian.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_italian.h"
    p->stemmer.create = italian_UTF_8_create_env;
    p->stemmer.close = italian_UTF_8_close_env;
    p->stemmer.stem = italian_UTF_8_stem;
@@ -300,7 +300,7 @@ else if ( nIn==7 &&  memcmp("italian", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_norwegian
   else if ( nIn==9 &&  memcmp("norwegian", zIn, 9)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_norwegian.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_norwegian.h"
      p->stemmer.create = norwegian_UTF_8_create_env;
      p->stemmer.close = norwegian_UTF_8_close_env;
      p->stemmer.stem = norwegian_UTF_8_stem;
@@ -308,7 +308,7 @@ else if ( nIn==7 &&  memcmp("italian", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_porter
   else if ( nIn==6 &&  memcmp("porter", zIn, 6)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_porter.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_porter.h"
      p->stemmer.create = porter_UTF_8_create_env;
      p->stemmer.close = porter_UTF_8_close_env;
      p->stemmer.stem = porter_UTF_8_stem;
@@ -316,7 +316,7 @@ else if ( nIn==7 &&  memcmp("italian", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_portuguese
   else if ( nIn==10 &&  memcmp("portuguese", zIn, 10)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_portuguese.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_portuguese.h"
      p->stemmer.create = portuguese_UTF_8_create_env;
      p->stemmer.close = portuguese_UTF_8_close_env;
      p->stemmer.stem = portuguese_UTF_8_stem;
@@ -324,7 +324,7 @@ else if ( nIn==7 &&  memcmp("italian", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_romanian
   else if ( nIn==8 &&  memcmp("romanian", zIn, 8)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_romanian.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_romanian.h"
      p->stemmer.create = romanian_UTF_8_create_env;
      p->stemmer.close = romanian_UTF_8_close_env;
      p->stemmer.stem = romanian_UTF_8_stem;
@@ -332,7 +332,7 @@ else if ( nIn==7 &&  memcmp("italian", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_russian
 else if ( nIn==7 &&  memcmp("russian", zIn, 7)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_russian.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_russian.h"
    p->stemmer.create = russian_UTF_8_create_env;
    p->stemmer.close = russian_UTF_8_close_env;
    p->stemmer.stem = russian_UTF_8_stem;
@@ -340,7 +340,7 @@ else if ( nIn==7 &&  memcmp("russian", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_spanish
 else if ( nIn==7 &&  memcmp("spanish", zIn, 7)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_spanish.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_spanish.h"
    p->stemmer.create = spanish_UTF_8_create_env;
    p->stemmer.close = spanish_UTF_8_close_env;
    p->stemmer.stem = spanish_UTF_8_stem;
@@ -348,7 +348,7 @@ else if ( nIn==7 &&  memcmp("spanish", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_swedish
 else if ( nIn==7 &&  memcmp("swedish", zIn, 7)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_swedish.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_swedish.h"
    p->stemmer.create = swedish_UTF_8_create_env;
    p->stemmer.close = swedish_UTF_8_close_env;
    p->stemmer.stem = swedish_UTF_8_stem;
@@ -356,7 +356,7 @@ else if ( nIn==7 &&  memcmp("swedish", zIn, 7)==0 ) {
 #endif
 #ifdef WITH_STEMMER_turkish
 else if ( nIn==7 &&  memcmp("turkish", zIn, 7)==0 ) {
-#include "libstemmer_c/src_c/stem_UTF_8_turkish.h"
+#include "../libstemmer_c/src_c/stem_UTF_8_turkish.h"
    p->stemmer.create = turkish_UTF_8_create_env;
    p->stemmer.close = turkish_UTF_8_close_env;
    p->stemmer.stem = turkish_UTF_8_stem;

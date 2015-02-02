@@ -13,24 +13,14 @@
  ** Implementation based on the "unicode" full-text-search tokenizer.
  */
 
-#include "../fts3_tokenizer.h"
+#include "fts3_tokenizer.h"
 #include <string.h>
 #include <ctype.h>
 
-#define HTML_NAME  "FTS3HTMLTokenizer"
-
-#define UNICODE0_DLL_EXPORTED __attribute__((__visibility__("default")))
-
-void get_html_tokenizer_module(const sqlite3_tokenizer_module **ppModule);
+int registerTokenizer(sqlite3 *db, char *zName);
 
 #ifndef _FTS3_TOKENIZER_H_
 #define _FTS3_TOKENIZER_H_
-
-UNICODE0_DLL_EXPORTED int sqlite3_extension_init_html(
-    sqlite3 *db,          /* The database connection */
-    char **pzErrMsg,      /* Write error messages here */
-    const struct sqlite3_api_routines *pApi  /* API methods */
-    );
 
 typedef struct sqlite3_tokenizer_module sqlite3_tokenizer_module;
 typedef struct sqlite3_tokenizer sqlite3_tokenizer;
