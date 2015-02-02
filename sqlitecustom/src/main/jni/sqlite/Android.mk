@@ -39,7 +39,7 @@ LOCAL_SRC_FILES:=                             \
 LOCAL_SRC_FILES += sqlite3secure.c
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/nativehelper/
 
-LOCAL_MODULE:= libsqliteX
+LOCAL_MODULE:= sqliteX
 LOCAL_LDLIBS += -ldl -llog
 
 include $(BUILD_SHARED_LIBRARY)

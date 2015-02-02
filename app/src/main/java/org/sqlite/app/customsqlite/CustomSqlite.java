@@ -373,8 +373,8 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        //final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_test"});
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_unicodesn"});
+        //final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers", "sqlite3_extension_init_test"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers", "sqlite3_extension_init_unicodesn"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
@@ -406,7 +406,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libunicodesn"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libtokenizers"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
@@ -438,7 +438,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_character"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers", "sqlite3_extension_init_character"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
@@ -471,7 +471,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libunicodesn"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libtokenizers"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
@@ -504,7 +504,7 @@ public class CustomSqlite extends Activity {
 
     private void runTheTests() {
         System.loadLibrary("sqliteX");
-        System.loadLibrary("unicodesn");
+        System.loadLibrary("tokenizers");
         DB_PATH = getApplicationContext().getDatabasePath("test.db");
         DB_PATH.mkdirs();
 

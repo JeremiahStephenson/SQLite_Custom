@@ -77,7 +77,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/unicodesn/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/character/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/html/
 
-LOCAL_MODULE:= unicodesn
+LOCAL_MODULE:= tokenizers
 LOCAL_SHARED_LIBRARIES := libsqliteX
 LOCAL_LDLIBS += -ldl -llog
 
