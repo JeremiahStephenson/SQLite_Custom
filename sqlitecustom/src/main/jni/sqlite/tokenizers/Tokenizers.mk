@@ -45,8 +45,8 @@ else
 endif
 
 LOCAL_SRC_FILES := extension.c
-LOCAL_SRC_FILES += fts3_unicodesn.c
-LOCAL_SRC_FILES += fts3_unicode2.c
+LOCAL_SRC_FILES += unicodesn/fts3_unicodesn.c
+LOCAL_SRC_FILES += unicodesn/fts3_unicode2.c
 LOCAL_SRC_FILES += libstemmer_c/runtime/api_sq3.c
 LOCAL_SRC_FILES += libstemmer_c/runtime/utilities_sq3.c
 
@@ -68,13 +68,14 @@ LOCAL_SRC_FILES += libstemmer_c/src_c/stem_UTF_8_swedish.c
 LOCAL_SRC_FILES += libstemmer_c/src_c/stem_UTF_8_turkish.c
 
 LOCAL_SRC_FILES += character/character_tokenizer.c
-LOCAL_SRC_FILES += xml/xml_tokenizer.c
+LOCAL_SRC_FILES += html/fts3_html_tokenizer.c
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/nativehelper/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer_c/runtime/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer_c/src_c/
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/unicodesn/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/character/
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/xml/
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/html/
 
 LOCAL_MODULE:= unicodesn
 LOCAL_SHARED_LIBRARIES := libsqliteX

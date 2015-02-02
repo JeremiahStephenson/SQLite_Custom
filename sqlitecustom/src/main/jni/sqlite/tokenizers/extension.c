@@ -15,11 +15,9 @@
 #include "../sqlite3ext.h"
 #include <android/log.h>
 
-#include "fts3_unicodesn.h"
+#include "unicodesn/fts3_unicodesn.h"
 #include "character/character_tokenizer.h"
-#include "xml/xml_tokenizer.h"
-
-#define APPNAME "CustomSQL"
+#include "html/fts3_html_tokenizer.h"
 
 SQLITE_EXTENSION_INIT1
 
@@ -86,7 +84,7 @@ int sqlite3_extension_init_character(
    return 0;
 }
 
-int sqlite3_extension_init_xml(
+int sqlite3_extension_init_html(
       sqlite3 *db,          /* The database connection */
       char **pzErrMsg,      /* Write error messages here */
       const sqlite3_api_routines *pApi  /* API methods */
@@ -96,9 +94,9 @@ int sqlite3_extension_init_xml(
 
    SQLITE_EXTENSION_INIT2(pApi)
 
-   get_xml_tokenizer_module(&tokenizer);
+   get_html_tokenizer_module(&tokenizer);
 
-   registerTokenizer(db, XML_NAME, tokenizer);
+   registerTokenizer(db, HTML_NAME, tokenizer);
 
    return 0;
 }

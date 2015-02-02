@@ -28,6 +28,18 @@
 
 #include "../fts3_tokenizer.h"
 
+#define CHARACTER_NAME  "character"
+
+#define UNICODE0_DLL_EXPORTED __attribute__((__visibility__("default")))
+
 void get_character_tokenizer_module(const sqlite3_tokenizer_module **ppModule);
+
+struct sqlite3_api_routines;
+
+UNICODE0_DLL_EXPORTED int sqlite3_extension_init_character(
+    sqlite3 *db,          /* The database connection */
+    char **pzErrMsg,      /* Write error messages here */
+    const struct sqlite3_api_routines *pApi  /* API methods */
+    );
 
 #endif

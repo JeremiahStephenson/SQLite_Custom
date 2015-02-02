@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -407,12 +406,12 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_character"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_html"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=character)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=FTS3HTMLTokenizer)");
 
         final String[] names = getResources().getStringArray(R.array.html);
 
@@ -425,7 +424,7 @@ public class CustomSqlite extends Activity {
         if (c != null && c.moveToFirst()) {
             testResult("fts_text_2.0", String.valueOf(c.getCount()), "0");
         } else {
-            testResult("fts_text_2.0", "NULL", "0");
+            testResult("fts_text_2.0", "0", "0");
         }
 
         if (c != null) {
@@ -456,12 +455,7 @@ public class CustomSqlite extends Activity {
         Cursor c = db.rawQuery("SELECT * FROM Book WHERE Book MATCH ?", new String[]{"\"end\""});
 
         if (c != null && c.moveToFirst()) {
-            testResult("fts_text_3.0", String.valueOf(c.getCount()), "1");
-
-            do {
-                Log.d("Book Test", c.getString(c.getColumnIndex("name")));
-            } while (c.moveToNext());
-
+            testResult("fts_text_3.0", String.valueOf(c.getCount()), "2");
         } else {
             testResult("fts_text_3.0", "0", "1");
         }
@@ -477,12 +471,12 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_xml"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libunicodesn", "sqlite3_extension_init_html"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=xml)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=FTS3HTMLTokenizer)");
 
         db.execSQL("INSERT INTO v1 VALUES('<html>Adrenaline <b>Junkies</b> Unite</html>')");
         db.execSQL("INSERT INTO v1 VALUES('<html>Linux Nerds Reunion</html>')");
@@ -491,19 +485,12 @@ public class CustomSqlite extends Activity {
         db.execSQL("INSERT INTO v1 VALUES('<html>Fart Hero Stinks</html>')");
         db.execSQL("INSERT INTO v1 VALUES('<html>Sneeze Scars Message</html>')");
         db.execSQL("INSERT INTO v1 VALUES('<html>Leian Solo Falls</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html>Bob Unite Job</html>')");
 
-//        db.execSQL("INSERT INTO v1 VALUES('Adrenaline Junkies Unite')");
-//        db.execSQL("INSERT INTO v1 VALUES('Linux Nerds Reunion')");
-//        db.execSQL("INSERT INTO v1 VALUES('Penicillin Users Assemble')");
-//        db.execSQL("INSERT INTO v1 VALUES('Burp Man Returns')");
-//        db.execSQL("INSERT INTO v1 VALUES('Fart Hero Stinks')");
-//        db.execSQL("INSERT INTO v1 VALUES('Sneeze Scars Message')");
-//        db.execSQL("INSERT INTO v1 VALUES('Leian Solo Falls')");
-
-        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"\"adrenaline\""});
+        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"unite"});
 
         if (c != null && c.moveToFirst()) {
-            testResult("fts_text_4.0", String.valueOf(c.getCount()), "3");
+            testResult("fts_text_4.0", String.valueOf(c.getCount()), "2");
         } else {
             testResult("fts_text_4.0", "0", "1");
         }
@@ -533,15 +520,15 @@ public class CustomSqlite extends Activity {
             public Object call() throws Exception {
                 try {
                     reportVersion();
-//                    csrTest1();
-//                    csrTest2();
-//                    threadTest1();
-//                    threadTest2();
-//                    seeTest1();
-//                    seeTest2();
-                    //ftsTest1();
-                    //ftsTest2();
-                    //ftsTest3();
+                    csrTest1();
+                    csrTest2();
+                    threadTest1();
+                    threadTest2();
+                    seeTest1();
+                    seeTest2();
+                    ftsTest1();
+                    ftsTest2();
+                    ftsTest3();
                     ftsTest4();
                     return null;
                 } catch(Exception e) {

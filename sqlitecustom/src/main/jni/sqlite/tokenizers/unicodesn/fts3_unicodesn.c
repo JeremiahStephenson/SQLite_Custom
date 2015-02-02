@@ -16,11 +16,11 @@
 #include "fts3_unicodesn.h"
 
 /* Snowball stemmer */
-#include "libstemmer_c/runtime/api.h"
+#include "../libstemmer_c/runtime/api.h"
 
 #ifdef SQLITE_ENABLE_FTS4_UNICODE61
 
-#include "fts3Int.h"
+#include "../fts3Int.h"
 #if !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_FTS3)
 
 #include <assert.h>
@@ -29,7 +29,7 @@
 #include <string.h>
 #include <android/log.h>
 
-#include "fts3_tokenizer.h"
+#include "../fts3_tokenizer.h"
 
 /*
 ** The following two macros - READ_UTF8 and WRITE_UTF8 - have been copied
