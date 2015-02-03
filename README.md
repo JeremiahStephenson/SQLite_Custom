@@ -59,7 +59,7 @@ Some import statements might need to be adjusted to point to some of the OS rela
 
 ##SQLite
 
-The initial code for SQLite was pulled from this [repository](http://www.sqlite.org/android/tree?ci=trunk "Title") but the version of SQLite has since been update to 3.8.8.1.
+The initial code for SQLite was pulled from this [repository](http://www.sqlite.org/android/tree?ci=trunk "Title") but the version of SQLite has since been update to 3.8.8.2.
 As SQLite is update this can be updated in this repository easily by downloading the amalgamation source from [here](http://www.sqlite.org/download.html "Title"). 
 Extract the source from the zip file and copy the updated files into the jni folder. That is all that needs to be done to update the version of SQLite.
 
@@ -67,7 +67,7 @@ Extract the source from the zip file and copy the updated files into the jni fol
 
 SQLite comes prepackaged with some built in tokenizers but this project has been set up with the ability to add your own. 
 
-There are currently two different tokenizers included.
+There are currently two different custom tokenizers already included.
 
 1. [SqliteSubstringSearch](https://github.com/haifengkao/SqliteSubstringSearch "Title")
 2. [FTS3HTMLTokenizer](https://github.com/stephanheilner/FTS3HTMLTokenizer "Title")
@@ -119,7 +119,7 @@ To add more tokenizers follow these steps:
 
         LOCAL_SRC_FILES += fts3_html_tokenizer.c
 
-5. Refer to the example app project for how to use the tokenizers. 
+5. Follow the steps below for how to use a tokenizer in your project.
 
     a. Before performing any database operations you must call the following code:
         
@@ -137,6 +137,14 @@ To add more tokenizers follow these steps:
     
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=FTS3HTMLTokenizer)");
         
-        
-Any of the current built in tokenizers such as the html tokenizer can be updated easily by simple copying in the new files from the above listed repositories.
+          
+
+Any of the current built in custom tokenizers such as the html tokenizer can be updated easily by simple copying in the new files from the above listed repositories.
+
+Refer to the example app project for more about how to use the tokenizers. 
+
+
+
+
+
    
