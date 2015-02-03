@@ -2,8 +2,8 @@
 
 ## Overview
 
-The purpose of this project is to allow an application to use the Android NDK to build a custom version of SQLite to be embedded within the application while still utilizing the standard Java interface on all devices running Android 2.3 or later. 
-The custom SQLite database can be further customized by adding additional tokenizers.
+The purpose of this project is to use the Android NDK to create a custom version of SQLite to be embedded within an application and run on any Android device with Android 2.3 or later.
+This library can be further customized by adding additional SQLite tokenizers.
 
 ## Build
 
@@ -42,19 +42,19 @@ The following lines from the gradle file can be commented out to allow for the f
 
 Most of the code is taken directly from this [repository](http://www.sqlite.org/android/tree?ci=trunk "Title").
 
-One of the main differences with this repository is that the code has broken up into two separate modules.
+One of the main differences with this repository is that the code is broken up into two separate modules.
 
 1. An app that can be used for testing the custom SQLite database.
-2. The library project containing all relevant C, C++, and Java code for the custom SQLite database. This compiles into an aar that can be used in any application.
+2. The library project containing all relevant C, C++, and Java code for the custom SQLite database. This compiles into an aar that can be used for any application.
 
 Some additional classes were pulled from the [api-level-15](http://www.sqlite.org/android/timeline?n=100&r=api-level-15 "Title") branch to allow for compatibility with API 15.
 
-To allow the project to be compatible with API 10 and up the `executeForBlobFileDescriptor(String sql, Object[] bindArgs,
-                                                                          CancellationSignal cancellationSignal)` had to be removed.
+To allow for the project to be compatible with API 10 and up the `executeForBlobFileDescriptor(String sql, Object[] bindArgs, CancellationSignal cancellationSignal)` had to be removed. 
+This call was using a class that incompatible with API 10.
                                                                           
-Other additional changes were implemented to allow for compatibility with API 10 and above including the addition of DatabaseUtils. All other files had their imports adjusted to account for the changes.
+Other additional changes were implemented to allow for compatibility with API 10 and above including the addition of DatabaseUtils. All other source files have had their imports adjusted to account for the changes.
 
-If anything is updated in the source [repository](http://www.sqlite.org/android/tree?ci=trunk "Title") the code can be copied over here fairly easily. 
+If anything is updated in the source [repository](http://www.sqlite.org/android/tree?ci=trunk "Title") the code can be copied over fairly easily. 
 Some import statements might need to be adjusted to point to some of the OS related classes such as `CancellationSignal`.
 
 ##SQLite
