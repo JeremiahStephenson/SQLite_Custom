@@ -373,39 +373,6 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        //final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers", "sqlite3_extension_init_test"});
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers", "sqlite3_extension_init_unicodesn"});
-        if (load == null || !load.moveToFirst()) {
-            throw new RuntimeException("Unicode Extension load failed!");
-        }
-
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=unicodesn \"stemmer=russian\")");
-
-        final String[] names = getResources().getStringArray(R.array.dummy_names);
-
-        for (String name : names) {
-            db.execSQL("INSERT INTO v1 VALUES ('" + name + "')");
-        }
-
-        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"Жопа"});
-
-        if (c != null && c.moveToFirst()) {
-            testResult("fts_text_1.0", String.valueOf(c.getCount()), "1");
-        } else {
-            testResult("fts_text_1.0", "0", "1");
-        }
-
-        if (c != null) {
-            c.close();
-        }
-
-        db.close();
-    }
-
-    private void ftsTest2() throws Exception {
-        SQLiteDatabase.deleteDatabase(DB_PATH);
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
-
         final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libtokenizers"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
@@ -422,9 +389,9 @@ public class CustomSqlite extends Activity {
         Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"body"});
 
         if (c != null && c.moveToFirst()) {
-            testResult("fts_text_2.0", String.valueOf(c.getCount()), "0");
+            testResult("fts_text_1.0", String.valueOf(c.getCount()), "0");
         } else {
-            testResult("fts_text_2.0", "0", "0");
+            testResult("fts_text_1.0", "0", "0");
         }
 
         if (c != null) {
@@ -434,7 +401,7 @@ public class CustomSqlite extends Activity {
         db.close();
     }
 
-    private void ftsTest3() throws Exception {
+    private void ftsTest2() throws Exception {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
@@ -455,9 +422,9 @@ public class CustomSqlite extends Activity {
         Cursor c = db.rawQuery("SELECT * FROM Book WHERE Book MATCH ?", new String[]{"\"end\""});
 
         if (c != null && c.moveToFirst()) {
-            testResult("fts_text_3.0", String.valueOf(c.getCount()), "2");
+            testResult("fts_text_2.0", String.valueOf(c.getCount()), "2");
         } else {
-            testResult("fts_text_3.0", "0", "1");
+            testResult("fts_text_2.0", "0", "1");
         }
 
         if (c != null) {
@@ -467,7 +434,7 @@ public class CustomSqlite extends Activity {
         db.close();
     }
 
-    private void ftsTest4() throws Exception {
+    private void ftsTest3() throws Exception {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
@@ -490,9 +457,9 @@ public class CustomSqlite extends Activity {
         Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"unite"});
 
         if (c != null && c.moveToFirst()) {
-            testResult("fts_text_4.0", String.valueOf(c.getCount()), "2");
+            testResult("fts_text_3.0", String.valueOf(c.getCount()), "2");
         } else {
-            testResult("fts_text_4.0", "0", "1");
+            testResult("fts_text_3.0", "0", "1");
         }
 
         if (c != null) {
@@ -529,7 +496,6 @@ public class CustomSqlite extends Activity {
                     ftsTest1();
                     ftsTest2();
                     ftsTest3();
-                    ftsTest4();
                     return null;
                 } catch(Exception e) {
                     appendString("Exception: " + e.toString() + "\n");

@@ -12,23 +12,6 @@ LOCAL_CFLAGS += -U__APPLE__
 LOCAL_CFLAGS += -DHAVE_STRCHRNUL=0
 LOCAL_CFLAGS += -DSQLITE_ENABLE_FTS3
 LOCAL_CFLAGS += -DSQLITE_ENABLE_FTS3_PARENTHESIS
-LOCAL_CFLAGS += -DSQLITE_ENABLE_FTS4_UNICODE61
-LOCAL_CFLAGS += -DWITH_STEMMER_dutch
-LOCAL_CFLAGS += -DWITH_STEMMER_danish
-LOCAL_CFLAGS += -DWITH_STEMMER_english
-LOCAL_CFLAGS += -DWITH_STEMMER_finnish
-LOCAL_CFLAGS += -DWITH_STEMMER_french
-LOCAL_CFLAGS += -DWITH_STEMMER_german
-LOCAL_CFLAGS += -DWITH_STEMMER_hungarian
-LOCAL_CFLAGS += -DWITH_STEMMER_italian
-LOCAL_CFLAGS += -DWITH_STEMMER_norwegian
-LOCAL_CFLAGS += -DWITH_STEMMER_porter
-LOCAL_CFLAGS += -DWITH_STEMMER_portuguese
-LOCAL_CFLAGS += -DWITH_STEMMER_romanian
-LOCAL_CFLAGS += -DWITH_STEMMER_russian
-LOCAL_CFLAGS += -DWITH_STEMMER_spanish
-LOCAL_CFLAGS += -DWITH_STEMMER_swedish
-LOCAL_CFLAGS += -DWITH_STEMMER_turkish
 LOCAL_CFLAGS += -DSQLITE_DEFAULT_JOURNAL_SIZE_LIMIT=1048576
 LOCAL_CFLAGS += -DSQLITE_POWERSAFE_OVERWRITE=1
 LOCAL_CFLAGS += -DSQLITE_ENABLE_MEMORY_MANAGEMENT=1
@@ -45,35 +28,10 @@ else
 endif
 
 LOCAL_SRC_FILES := tokenizers/extension.c
-LOCAL_SRC_FILES += tokenizers/unicodesn/fts3_unicodesn.c
-LOCAL_SRC_FILES += tokenizers/unicodesn/fts3_unicode2.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/runtime/api_sq3.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/runtime/utilities_sq3.c
-
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_danish.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_dutch.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_english.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_finnish.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_french.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_german.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_hungarian.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_italian.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_norwegian.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_porter.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_portuguese.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_romanian.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_russian.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_spanish.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_swedish.c
-LOCAL_SRC_FILES += tokenizers/libstemmer_c/src_c/stem_UTF_8_turkish.c
-
 LOCAL_SRC_FILES += tokenizers/character/character_tokenizer.c
 LOCAL_SRC_FILES += fts3_html_tokenizer.c
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/nativehelper/
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/libstemmer_c/runtime/
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/libstemmer_c/src_c/
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/unicodesn/
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/nativehelper/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/character/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/html/
 

@@ -15,7 +15,6 @@
 #include "../sqlite3ext.h"
 #include <android/log.h>
 
-#include "unicodesn/fts3_unicodesn.h"
 #include "character/character_tokenizer.h"
 #include "html/fts3_html_tokenizer_main.h"
 
@@ -80,23 +79,6 @@ int sqlite3_extension_init_character(
    get_character_tokenizer_module(&tokenizer);
 
    registerExtensionTokenizer(db, CHARACTER_NAME, tokenizer);
-
-   return 0;
-}
-
-int sqlite3_extension_init_unicodesn(
-      sqlite3 *db,          /* The database connection */
-      char **pzErrMsg,      /* Write error messages here */
-      const sqlite3_api_routines *pApi  /* API methods */
-      )
-{
-   const sqlite3_tokenizer_module *tokenizer;
-
-   SQLITE_EXTENSION_INIT2(pApi)
-
-   sqlite3Fts3UnicodeSnTokenizer(&tokenizer);
-
-   registerExtensionTokenizer(db, TOKENIZER_NAME, tokenizer);
 
    return 0;
 }
