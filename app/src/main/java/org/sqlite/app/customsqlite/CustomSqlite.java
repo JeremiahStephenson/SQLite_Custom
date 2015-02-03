@@ -440,19 +440,19 @@ public class CustomSqlite extends Activity {
 
         final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libtokenizers"});
         if (load == null || !load.moveToFirst()) {
-            throw new RuntimeException("Unicode Extension load failed!");
+            throw new RuntimeException("Tokenizer Extension load failed!");
         }
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=FTS3HTMLTokenizer)");
 
-        db.execSQL("INSERT INTO v1 VALUES('<html>Adrenaline <b>Junkies</b> Unite</html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html>Linux Nerds Reunion</html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html>Penicillin Users Assemble</html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html>Burp Man Returns</html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html>Fart Hero Stinks</html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html>Sneeze Scars Message</html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html>Leian Solo Falls</html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html>Bob Unite Job</html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Adrenaline <b>Junkies</b> Unite </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Linux Nerds Reunion </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Penicillin Users Assemble </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Burp Man Returns </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Fart Hero Stinks </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Sneeze Scars Massage </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Leian Solo Falls </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Bob Unite Jobs </html>')");
 
         Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"unite"});
 
@@ -470,8 +470,8 @@ public class CustomSqlite extends Activity {
     }
 
     private void runTheTests() {
-        System.loadLibrary("sqliteX");
-        System.loadLibrary("tokenizers");
+        System.loadLibrary("sqliteX"); // loads the custom sqlite library
+        System.loadLibrary("tokenizers"); // loads the tokenizer library
         DB_PATH = getApplicationContext().getDatabasePath("test.db");
         DB_PATH.mkdirs();
 

@@ -1,6 +1,5 @@
 
 #include "../../fts3_html_tokenizer.h"
-#include "../../fts3_tokenizer.h"
 
 #define HTML_NAME "FTS3HTMLTokenizer"
 
