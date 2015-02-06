@@ -1,7 +1,7 @@
 
 #include "../../fts3_html_tokenizer.h"
 
-#define HTML_NAME "FTS3HTMLTokenizer"
+#define HTML_NAME "HTMLTokenizer"
 
 #define UNICODE0_DLL_EXPORTED __attribute__((__visibility__("default")))
 

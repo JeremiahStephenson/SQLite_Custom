@@ -378,7 +378,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=FTS3HTMLTokenizer)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=HTMLTokenizer)");
 
         final String[] names = getResources().getStringArray(R.array.html);
 
@@ -443,7 +443,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Tokenizer Extension load failed!");
         }
 
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=FTS3HTMLTokenizer)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer)");
 
         db.execSQL("INSERT INTO v1 VALUES('<html> Adrenaline <b>Junkies</b> Unite </html>')");
         db.execSQL("INSERT INTO v1 VALUES('<html> Linux Nerds Reunion </html>')");
