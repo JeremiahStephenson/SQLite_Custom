@@ -452,9 +452,9 @@ public class CustomSqlite extends Activity {
         db.execSQL("INSERT INTO v1 VALUES('<html> Fart Hero Stinks </html>')");
         db.execSQL("INSERT INTO v1 VALUES('<html> Sneeze Scars Massage </html>')");
         db.execSQL("INSERT INTO v1 VALUES('<html> Leian Solo Falls </html>')");
-        db.execSQL("INSERT INTO v1 VALUES('<html> Bob Unite Jobs </html>')");
+        db.execSQL("INSERT INTO v1 VALUES('<html> Bob Unites Jobs </html>')");
 
-        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"unite"});
+        Cursor c = db.rawQuery("SELECT * FROM v1 WHERE name MATCH ?", new String[]{"unites"});
 
         if (c != null && c.moveToFirst()) {
             testResult("fts_text_3.0", String.valueOf(c.getCount()), "2");

@@ -31,9 +31,51 @@ LOCAL_SRC_FILES := tokenizers/extension.c
 LOCAL_SRC_FILES += tokenizers/character/character_tokenizer.c
 LOCAL_SRC_FILES += fts3_html_tokenizer.c
 
+LOCAL_SRC_FILES += libstemmer/libstemmer/libstemmer.c
+LOCAL_SRC_FILES += libstemmer/runtime/api.c
+LOCAL_SRC_FILES += libstemmer/runtime/utilities.c
+
+# Languages
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_danish.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_dutch.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_english.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_finnish.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_french.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_german.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_2_hungarian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_italian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_norwegian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_porter.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_portuguese.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_2_romanian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_KOI8_R_russian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_spanish.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_ISO_8859_1_swedish.c
+
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_danish.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_dutch.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_english.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_finnish.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_french.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_german.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_hungarian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_italian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_norwegian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_porter.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_portuguese.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_romanian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_russian.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_spanish.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_swedish.c
+LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_turkish.c
+
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/nativehelper/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/character/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/html/
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/libstemmer/
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/runtime/
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/src_c/
 
 LOCAL_MODULE:= tokenizers
 LOCAL_SHARED_LIBRARIES := libsqliteX
