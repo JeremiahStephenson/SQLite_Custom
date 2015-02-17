@@ -583,8 +583,9 @@ static int unicodeCreate(
             rc = unicodeAddExceptions(pNew, 0, &z[11], n - 11);
         }
         else if (n > 0) {
-            pNew->locale = malloc(sizeof(char) * n);
-            memcpy(pNew->locale, z, n);
+            pNew->locale = malloc((n + 1) * sizeof(char));
+            strcpy(pNew->locale, z);
+            pNew->locale[n] = '\0';
         }
         else {
             /* Unrecognized argument */
