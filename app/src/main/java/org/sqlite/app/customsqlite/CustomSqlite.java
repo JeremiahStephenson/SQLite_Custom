@@ -443,7 +443,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Tokenizer Extension load failed!");
         }
 
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer stemmer=english)");
 
         db.execSQL("INSERT INTO v1 VALUES('<html> Adrenaline <b>Junkies</b> Unite </html>')");
         db.execSQL("INSERT INTO v1 VALUES('<html> Linux Nerds Reunion </html>')");

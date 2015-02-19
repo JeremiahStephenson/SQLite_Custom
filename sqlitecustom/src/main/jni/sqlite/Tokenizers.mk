@@ -20,6 +20,7 @@ LOCAL_CFLAGS += -DSQLITE_TEMP_STORE=3
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-int-to-pointer-cast
 LOCAL_CFLAGS += -Wno-maybe-uninitialized -Wno-parentheses
 LOCAL_CPPFLAGS += -Wno-conversion-null
+LOCAL_CPPFLAGS += -std=c++11
 
 ifeq ($(TARGET_ARCH), arm)
 	LOCAL_CFLAGS += -DPACKED="__attribute__ ((packed))"
@@ -29,6 +30,7 @@ endif
 
 LOCAL_SRC_FILES := tokenizers/extension.c
 LOCAL_SRC_FILES += tokenizers/character/character_tokenizer.c
+LOCAL_SRC_FILES += stopwords.cpp
 LOCAL_SRC_FILES += fts3_html_tokenizer.c
 
 LOCAL_SRC_FILES += libstemmer/libstemmer/libstemmer.c
@@ -76,6 +78,8 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/html/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/libstemmer/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/runtime/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/src_c/
+
+LOCAL_C_INCLUDES += ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/4.8/include
 
 LOCAL_MODULE:= tokenizers
 LOCAL_SHARED_LIBRARIES := libsqliteX
