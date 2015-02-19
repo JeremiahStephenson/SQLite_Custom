@@ -79,8 +79,6 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/libstemmer/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/runtime/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/src_c/
 
-LOCAL_C_INCLUDES += ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/4.8/include
-
 LOCAL_MODULE:= tokenizers
 LOCAL_SHARED_LIBRARIES := libsqliteX
 LOCAL_LDLIBS += -ldl -llog
