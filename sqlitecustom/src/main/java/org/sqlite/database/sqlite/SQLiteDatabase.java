@@ -21,6 +21,7 @@
 package org.sqlite.database.sqlite;
 
 import android.content.ContentValues;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -853,6 +854,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
                 mConfigurationLocked.customFunctions.remove(wrapper);
                 throw ex;
             }
+        }
+    }
+
+    public void registerTokenizer(String name) throws RuntimeException {
+        registerTokenizer(name, null, null);
+    }
+
+    public void registerTokenizer(String name, AssetManager assetManager, String data) throws RuntimeException {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            mConnectionPoolLocked.registerTokenizer(name, assetManager, data);
         }
     }
 

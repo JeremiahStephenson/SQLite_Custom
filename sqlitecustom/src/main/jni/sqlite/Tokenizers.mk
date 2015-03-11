@@ -28,7 +28,8 @@ else
 	LOCAL_CFLAGS += -DPACKED=""
 endif
 
-LOCAL_SRC_FILES := tokenizers/extension.c
+LOCAL_SRC_FILES := android_database_SQLiteTokenizer.cpp
+LOCAL_SRC_FILES += tokenizers/extension.c
 LOCAL_SRC_FILES += tokenizers/character/character_tokenizer.c
 LOCAL_SRC_FILES += stopwords.cpp
 LOCAL_SRC_FILES += fts3_html_tokenizer.c
@@ -72,16 +73,13 @@ LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_swedish.c
 LOCAL_SRC_FILES += libstemmer/src_c/stem_UTF_8_turkish.c
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/nativehelper/
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/character/
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/tokenizers/html/
-
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/libstemmer/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/runtime/
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/src_c/
 
 LOCAL_MODULE:= tokenizers
 LOCAL_SHARED_LIBRARIES := libsqliteX
-LOCAL_LDLIBS += -ldl -llog
+LOCAL_LDLIBS += -ldl -llog -landroid
 
 include $(BUILD_SHARED_LIBRARY)
 

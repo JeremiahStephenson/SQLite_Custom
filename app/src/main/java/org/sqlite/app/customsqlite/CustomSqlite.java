@@ -378,6 +378,8 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
+        db.registerTokenizer("HTMLTokenizer", getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
+
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=HTMLTokenizer)");
 
         final String[] names = getResources().getStringArray(R.array.html);
@@ -405,10 +407,12 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers", "sqlite3_extension_init_character"});
+        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers"});
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
+
+        db.registerTokenizer("character");
 
         db.execSQL("CREATE VIRTUAL TABLE Book USING fts3(name TEXT NOT NULL, author TEXT, tokenize=character)");
 
@@ -442,6 +446,8 @@ public class CustomSqlite extends Activity {
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Tokenizer Extension load failed!");
         }
+
+        db.registerTokenizer("HTMLTokenizer", getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer stemmer=english)");
 

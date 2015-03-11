@@ -22,6 +22,7 @@ package org.sqlite.database.sqlite;
 
 /* import dalvik.system.BlockGuard; */
 
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.CursorWindow;
 import android.os.Build;
@@ -126,6 +127,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private static native void nativeClose(long connectionPtr);
     private static native void nativeRegisterCustomFunction(long connectionPtr,
             SQLiteCustomFunction function);
+    private static native void nativeRegisterTokenizer(long connectionPtr, String name, AssetManager assetManager, String data);
     private static native void nativeRegisterLocalizedCollators(long connectionPtr, String locale);
     private static native long nativePrepareStatement(long connectionPtr, String sql);
     private static native void nativeFinalizeStatement(long connectionPtr, long statementPtr);
@@ -406,7 +408,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     public void enableLocalizedCollators(){
       if( nativeHasCodec() ){
-	setLocaleFromConfiguration();
+	    setLocaleFromConfiguration();
       }
     }
 
@@ -989,6 +991,10 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     @Override
     public void onCancel() {
         nativeCancel(mConnectionPtr);
+    }
+
+    public void registerTokenizer(String name, AssetManager assetManager, String data) {
+        nativeRegisterTokenizer(mConnectionPtr, name, assetManager, data);
     }
 
     private void bindArguments(PreparedStatement statement, Object[] bindArgs) {

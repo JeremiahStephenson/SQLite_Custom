@@ -27,7 +27,7 @@
 #include "../../sqlite3.h"
 #include <ctype.h> //for tolower
 #include <string.h> //for memset
-#include "character_tokenizer.h"
+#include "../extension.h"
 
 #include <android/log.h>
 #include <stdio.h>

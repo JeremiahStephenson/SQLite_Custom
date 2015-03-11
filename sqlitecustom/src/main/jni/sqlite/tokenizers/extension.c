@@ -13,19 +13,21 @@
 */
 #include "../sqlite3.h"
 #include "../sqlite3ext.h"
+#include "extension.h"
 #include <android/log.h>
 
-#include "character/character_tokenizer.h"
-#include "html/fts3_html_tokenizer_main.h"
+#include <android/log.h>
+
+#define APPNAME "HTML Tokenizer"
 
 SQLITE_EXTENSION_INIT1
 
 /*
 ** Register a tokenizer implementation with FTS3 or FTS4.
 */
-static int registerExtensionTokenizer(
+int registerExtensionTokenizer(
   sqlite3 *db,
-  char *zName,
+  const char *zName,
   const sqlite3_tokenizer_module *p
 ){
   int rc;
@@ -44,6 +46,10 @@ static int registerExtensionTokenizer(
   return sqlite3_finalize(pStmt);
 }
 
+void androidLog(char const *log) {
+    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", log);
+}
+
 /* SQLite invokes this routine once when it loads the extension.
 ** Create new functions, collating sequences, and virtual table
 ** modules here.  This is usually the only exported symbol in
@@ -55,33 +61,11 @@ int sqlite3_extension_init(
       const sqlite3_api_routines *pApi  /* API methods */
       )
 {
-   const sqlite3_tokenizer_module *tokenizer;
-
    SQLITE_EXTENSION_INIT2(pApi)
-
-   sqlite3Fts3UnicodeTokenizer(&tokenizer);
-
-   registerExtensionTokenizer(db, HTML_NAME, tokenizer);
 
    return 0;
 }
 
-int sqlite3_extension_init_character(
-      sqlite3 *db,          /* The database connection */
-      char **pzErrMsg,      /* Write error messages here */
-      const sqlite3_api_routines *pApi  /* API methods */
-      )
-{
-   const sqlite3_tokenizer_module *tokenizer;
-
-   SQLITE_EXTENSION_INIT2(pApi)
-
-   get_character_tokenizer_module(&tokenizer);
-
-   registerExtensionTokenizer(db, CHARACTER_NAME, tokenizer);
-
-   return 0;
-}
 
 
 
