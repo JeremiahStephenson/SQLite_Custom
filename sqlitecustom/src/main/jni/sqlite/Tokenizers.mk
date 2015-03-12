@@ -79,7 +79,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libstemmer/src_c/
 
 LOCAL_MODULE:= tokenizers
 LOCAL_SHARED_LIBRARIES := libsqliteX
-LOCAL_LDLIBS += -ldl -llog -landroid
+LOCAL_LDLIBS += -ldl -llog
 
 include $(BUILD_SHARED_LIBRARY)
 

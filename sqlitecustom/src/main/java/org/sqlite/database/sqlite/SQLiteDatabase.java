@@ -40,6 +40,10 @@ import org.sqlite.os.CancellationSignal;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +74,8 @@ import java.util.WeakHashMap;
  */
 public final class SQLiteDatabase extends SQLiteClosable {
     private static final String TAG = "SQLiteDatabase";
+
+    private static final String STOPWORDS_FOLDER = "stopwords";
 
     private static final int EVENT_DB_CORRUPT = 75004;
 
@@ -862,9 +868,12 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     public void registerTokenizer(String name, AssetManager assetManager, String data) throws RuntimeException {
+        if (!TextUtils.isEmpty(name) && "HTMLTokenizer".equals(name) && assetManager != null) {
+            copyStopWordFiles(assetManager, data);
+        }
         synchronized (mLock) {
             throwIfNotOpenLocked();
-            mConnectionPoolLocked.registerTokenizer(name, assetManager, data);
+            mConnectionPoolLocked.registerTokenizer(name, data);
         }
     }
 
@@ -2060,6 +2069,80 @@ public final class SQLiteDatabase extends SQLiteClosable {
             databases.addAll(sActiveDatabases.keySet());
         }
         return databases;
+    }
+
+    private void copyStopWordFiles(AssetManager assetManager, String copyDir) {
+        try {
+            final String[] files = assetManager.list(STOPWORDS_FOLDER);
+
+            final File dir = new File(copyDir);
+            if (!dir.exists() && !dir.mkdir()) {
+                throw new RuntimeException("Unable to create directory: " + copyDir);
+            }
+
+            InputStream in = null;
+            OutputStream out = null;
+            File outFile;
+            int timeIndex;
+            int extIndex;
+            long timeStamp;
+            String newName = "";
+
+            for (String filename : files) {
+                timeStamp = 0;
+                try {
+                    timeIndex = filename.indexOf("_");
+                    extIndex = filename.lastIndexOf(".");
+                    if (timeIndex > 0 && extIndex > 0) {
+                        timeStamp = Long.parseLong(filename.substring(timeIndex + 1, extIndex));
+                        newName = filename.substring(0, timeIndex) + filename.substring(extIndex);
+                    }
+                } catch (NumberFormatException nexp) {
+                    nexp.printStackTrace();
+                }
+
+                if (timeStamp == 0 || TextUtils.isEmpty(newName)) {
+                    Log.e(TAG, "File does not contain timestamp: " + filename);
+                    continue;
+                }
+
+                try {
+                    in = assetManager.open(STOPWORDS_FOLDER + "/" + filename);
+                    outFile = new File(dir.getPath(), newName);
+                    if (!outFile.exists() || timeStamp > outFile.lastModified()) {
+                        out = new FileOutputStream(outFile);
+                        copyFile(in, out);
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to copy asset file: " + filename, e);
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            // NOOP
+                        }
+                    }
+                    if (out != null) {
+                        try {
+                            out.close();
+                        } catch (IOException e) {
+                            // NOOP
+                        }
+                    }
+                }
+            }
+        } catch (Exception exp) {
+            throw new RuntimeException("Unable to copy stop word files", exp);
+        }
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
     }
 
     /**

@@ -20,7 +20,6 @@
 
 package org.sqlite.database.sqlite;
 
-import android.content.res.AssetManager;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.Printer;
@@ -461,18 +460,18 @@ public final class SQLiteConnectionPool implements Closeable {
         }
     }
 
-    public void registerTokenizer(String name,  AssetManager assetManager, String data) {
+    public void registerTokenizer(String name, String data) {
         synchronized (mLock) {
             if (mAvailablePrimaryConnection != null) {
-                mAvailablePrimaryConnection.registerTokenizer(name, assetManager, data);
+                mAvailablePrimaryConnection.registerTokenizer(name, data);
             }
 
             for (SQLiteConnection connection : mAvailableNonPrimaryConnections) {
-                connection.registerTokenizer(name, assetManager, data);
+                connection.registerTokenizer(name, data);
             }
 
             for (SQLiteConnection connection : mAcquiredConnections.keySet()) {
-                connection.registerTokenizer(name, assetManager, data);
+                connection.registerTokenizer(name, data);
             }
         }
     }
