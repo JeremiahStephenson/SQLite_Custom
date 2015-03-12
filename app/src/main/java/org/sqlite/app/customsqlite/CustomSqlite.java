@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.sqlite.app.customsqlite.util.ExecutorUtil;
+import org.sqlite.database.enums.Tokenizer;
 import org.sqlite.database.sqlite.SQLiteDatabase;
 import org.sqlite.database.sqlite.SQLiteDatabaseCorruptException;
 import org.sqlite.database.sqlite.SQLiteOpenHelper;
@@ -378,7 +379,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        db.registerTokenizer("HTMLTokenizer", getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
+        db.registerTokenizer(Tokenizer.HTML_TOKENIZER, getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=HTMLTokenizer)");
 
@@ -412,7 +413,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        db.registerTokenizer("character");
+        db.registerTokenizer(Tokenizer.CHARACTER_TOKENIZER);
 
         db.execSQL("CREATE VIRTUAL TABLE Book USING fts3(name TEXT NOT NULL, author TEXT, tokenize=character)");
 
@@ -447,7 +448,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Tokenizer Extension load failed!");
         }
 
-        db.registerTokenizer("HTMLTokenizer", getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
+        db.registerTokenizer(Tokenizer.HTML_TOKENIZER, getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer stemmer=english)");
 

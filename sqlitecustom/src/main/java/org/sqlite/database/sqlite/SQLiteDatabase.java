@@ -35,6 +35,7 @@ import org.sqlite.database.DatabaseUtils;
 import org.sqlite.database.DefaultDatabaseErrorHandler;
 import org.sqlite.database.ExtraUtils;
 import org.sqlite.database.SQLException;
+import org.sqlite.database.enums.Tokenizer;
 import org.sqlite.database.sqlite.SQLiteDebug.DbStats;
 import org.sqlite.os.CancellationSignal;
 
@@ -863,17 +864,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
-    public void registerTokenizer(String name) throws RuntimeException {
-        registerTokenizer(name, null, null);
+    public void registerTokenizer(Tokenizer tokenizer) throws RuntimeException {
+        registerTokenizer(tokenizer, null, null);
     }
 
-    public void registerTokenizer(String name, AssetManager assetManager, String data) throws RuntimeException {
-        if (!TextUtils.isEmpty(name) && "HTMLTokenizer".equals(name) && assetManager != null) {
+    public void registerTokenizer(Tokenizer tokenizer, AssetManager assetManager, String data) throws RuntimeException {
+        if (Tokenizer.HTML_TOKENIZER == tokenizer && assetManager != null) {
             copyStopWordFiles(assetManager, data);
         }
         synchronized (mLock) {
             throwIfNotOpenLocked();
-            mConnectionPoolLocked.registerTokenizer(name, data);
+            mConnectionPoolLocked.registerTokenizer(tokenizer.getName(), data);
         }
     }
 

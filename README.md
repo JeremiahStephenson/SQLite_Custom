@@ -75,51 +75,33 @@ There are currently two different custom tokenizers already included.
 To add more tokenizers follow these steps:
 
 1. Add the source under tokenizers in the jni folder.
-2. Create a header file that links to the header file for your tokenizer like the one below.
-        
-        #include "../../fts3_html_tokenizer.h"
-        
-        #define HTML_NAME "FTS3HTMLTokenizer"
-        
-        #define UNICODE0_DLL_EXPORTED __attribute__((__visibility__("default")))
-        
-        void sqlite3Fts3UnicodeTokenizer(sqlite3_tokenizer_module const **ppModule);
-        
-        struct sqlite3_api_routines;
-        
-        UNICODE0_DLL_EXPORTED int sqlite3_extension_init_custom(
-           sqlite3 *db,          /* The database connection */
-           char **pzErrMsg,      /* Write error messages here */
-           const struct sqlite3_api_routines *pApi  /* API methods */
-           );
-    Define a name for the tokenizer and and change the exported function call to something unique.
-3. Open extension.c and add an entry for the exported function such as the one below.
+2. If you haven't already done so then add a function like the one below in your tokenizer to set the module.
 
-        int sqlite3_extension_init_custom(
-              sqlite3 *db,          /* The database connection */
-              char **pzErrMsg,      /* Write error messages here */
-              const sqlite3_api_routines *pApi  /* API methods */
-              )
-        {
-           const sqlite3_tokenizer_module *tokenizer;
-        
-           SQLITE_EXTENSION_INIT2(pApi)
-        
-           sqlite3Fts3UnicodeTokenizer(&tokenizer);
-        
-           registerExtensionTokenizer(db, CHARACTER_NAME, tokenizer);
-        
-           return 0;
+        void set_character_tokenizer_module(const sqlite3_tokenizer_module **ppModule){
+            *ppModule = &characterTokenizerModule;
         }
     
-    Add an import statement to the header file you created in step 2.
-    Make sure the name of the function matches what you defined in your header file. 
-    You also need to change the function being called to grab the tokenizer to the one defined in your tokenizer.
-4. Open Tokenizers.mk and add your C files to the list of C files being compiled into the module.
+3. Open extension.h and add the setter function you created in your tokenizer from step 2. You also need to set a name for your tokenizer like below.
+   
+        #define HTML_NAME "HTMLTokenizer"
+        
+4. Open android_database_SQLTokenizer.cpp and add the setter function from your tokenizer to the 'if' statement.
+
+        if (strcmp(nameStr, HTML_NAME) == 0) {
+            get_html_tokenizer_module(&p, dataStr);
+        } else if (strcmp(nameStr, CHARACTER_NAME) == 0) {
+            get_character_tokenizer_module(&p);
+        } else if (strcmp(nameStr, YOUR_TOKENIZER_NAME) == 0) {
+            get_your_tokenizer_module(&p);
+        }   
+   
+5. Open Tokenizers.mk and add your C files to the list of C files being compiled into the module.
 
         LOCAL_SRC_FILES += fts3_html_tokenizer.c
 
-5. Follow the steps below for how to use a tokenizer in your project.
+6. Open Tokenizer.java and add your tokenizer to the list of enums with the correct name defined in step 3.
+
+7. Follow the steps below for how to use a tokenizer in your project.
 
     a. Before performing any database operations you must call the following code:
         
@@ -132,10 +114,12 @@ To add more tokenizers follow these steps:
         if (load == null || !load.moveToFirst()) {
             throw new RuntimeException("Unicode Extension load failed!");
         }
+       
+    c. Call `registerTokenizer()` from `SQLiteDatabase` and pass in the tokenizer enum defined in step 6.
         
-    c. Now you can create your table that utilizes the tokenizer with the following:
+    d. Now you can create your table that utilizes the tokenizer with the following:
     
-        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=FTS3HTMLTokenizer)");
+        db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer)");
         
           
 
@@ -147,7 +131,7 @@ Refer to the example app project for more about how to use the tokenizers.
 License
 =======
 
-    Copyright 2015 Jeremiah.
+    Copyright 2015 Jerry Miah.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

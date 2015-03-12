@@ -33,9 +33,9 @@ static void nativeRegisterTokenizer(JNIEnv* env, jclass obj, jlong connectionPtr
         const sqlite3_tokenizer_module *p;
 
         if (strcmp(nameStr, HTML_NAME) == 0) {
-            get_html_tokenizer_module(&p, dataStr);
+            set_html_tokenizer_module(&p, dataStr);
         } else if (strcmp(nameStr, CHARACTER_NAME) == 0) {
-            get_character_tokenizer_module(&p);
+            set_character_tokenizer_module(&p);
         }
 
         if (p != NULL) {

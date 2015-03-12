@@ -174,6 +174,6 @@ static const sqlite3_tokenizer_module characterTokenizerModule = {
     characterNext,
 };
 
-void get_character_tokenizer_module(const sqlite3_tokenizer_module **ppModule){
+void set_character_tokenizer_module(const sqlite3_tokenizer_module **ppModule){
     *ppModule = &characterTokenizerModule;
 }

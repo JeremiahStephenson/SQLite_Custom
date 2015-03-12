@@ -825,7 +825,7 @@ static const sqlite3_tokenizer_module unicode_module = {
  ** Set *ppModule to a pointer to the sqlite3_tokenizer_module
  ** structure for the unicode tokenizer.
  */
-void get_html_tokenizer_module(sqlite3_tokenizer_module const **ppModule, const char *resourcePath){
+void set_html_tokenizer_module(sqlite3_tokenizer_module const **ppModule, const char *resourcePath){
     *ppModule = &unicode_module;
     if (resourcePath != NULL) {
         sprintf(resource_path, "%s", resourcePath);
