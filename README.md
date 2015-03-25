@@ -14,8 +14,8 @@ You will then need to modify your local.properties file and add a line that poin
 `ndk.dir=/Users/Android/android-ndk-r10d`
 
 The gradle file is configured to ignore the C and C++ files. This is due to an issue with Android Studio not being able to build properly. 
-To get around this problem the gradle file calls the ndk-build command manually. For this reason the C and C++ files don't show under the project files. 
-The following lines from the gradle file can be commented out to allow for the files to display. They will of course need to be un-commented for Android to build the project properly.
+To get around this problem the gradle file calls the ndk-build command manually. For this reason the C and C++ files don't show under the project files under the 'Android' project perspective.
+You can change the perspective to 'Project' and view all the files. The other option is to comment out the following lines in the gradle file to allow for the files to display. They will of course need to be un-commented for Android to build the project properly. It might be better just to change the perspective.
         
     sourceSets.main {
         jniLibs.srcDir 'src/main/libs'

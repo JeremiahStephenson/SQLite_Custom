@@ -379,7 +379,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Unicode Extension load failed!");
         }
 
-        db.registerTokenizer(Tokenizer.HTML_TOKENIZER, getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
+        db.registerTokenizer(Tokenizer.HTML_TOKENIZER);
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=HTMLTokenizer)");
 
@@ -448,7 +448,7 @@ public class CustomSqlite extends Activity {
             throw new RuntimeException("Tokenizer Extension load failed!");
         }
 
-        db.registerTokenizer(Tokenizer.HTML_TOKENIZER, getAssets(), getFilesDir().getAbsolutePath() + "/stopwords");
+        db.registerTokenizer(Tokenizer.HTML_TOKENIZER);
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer stemmer=english)");
 
