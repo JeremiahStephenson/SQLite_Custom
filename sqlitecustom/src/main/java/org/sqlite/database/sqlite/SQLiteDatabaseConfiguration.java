@@ -76,7 +76,7 @@ public final class SQLiteDatabaseConfiguration {
     /**
      * The database locale.
      *
-     * Default is the value returned by {@link java.util.Locale#getDefault()}.
+     * Default is the value returned by {@link Locale#getDefault()}.
      */
     public Locale locale;
 
@@ -98,7 +98,7 @@ public final class SQLiteDatabaseConfiguration {
      * database and default values for all other parameters.
      *
      * @param path The database path.
-     * @param openFlags Open flags for the database, such as {@link org.sqlite.database.sqlite.SQLiteDatabase#OPEN_READWRITE}.
+     * @param openFlags Open flags for the database, such as {@link SQLiteDatabase#OPEN_READWRITE}.
      */
     public SQLiteDatabaseConfiguration(String path, int openFlags) {
         if (path == null) {

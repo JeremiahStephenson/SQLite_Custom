@@ -21,7 +21,6 @@
 package org.sqlite.database.sqlite;
 
 import android.database.Cursor;
-
 import org.sqlite.database.sqlite.SQLiteDatabase.CursorFactory;
 import org.sqlite.os.CancellationSignal;
 

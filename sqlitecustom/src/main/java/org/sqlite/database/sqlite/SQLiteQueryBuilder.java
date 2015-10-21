@@ -22,11 +22,11 @@ package org.sqlite.database.sqlite;
 
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import org.sqlite.os.CancellationSignal;
+import org.sqlite.os.OperationCanceledException;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
-
-import org.sqlite.os.CancellationSignal;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -367,7 +367,7 @@ public class SQLiteQueryBuilder
      * @param limit Limits the number of rows returned by the query,
      *   formatted as LIMIT clause. Passing null denotes no LIMIT clause.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
-     * If the operation is canceled, then {@link org.sqlite.os.OperationCanceledException} will be thrown
+     * If the operation is canceled, then {@link OperationCanceledException} will be thrown
      * when the query is executed.
      * @return a cursor over the result set
      * @see android.content.ContentResolver#query(android.net.Uri, String[],
@@ -409,7 +409,7 @@ public class SQLiteQueryBuilder
 
     /**
      * Verifies that a SQL SELECT statement is valid by compiling it.
-     * If the SQL statement is not valid, this method will throw a {@link org.sqlite.database.sqlite.SQLiteException}.
+     * If the SQL statement is not valid, this method will throw a {@link SQLiteException}.
      */
     private void validateQuerySql(SQLiteDatabase db, String sql,
             CancellationSignal cancellationSignal) {

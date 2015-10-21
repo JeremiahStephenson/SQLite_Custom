@@ -20,6 +20,7 @@
 
 package org.sqlite.database.sqlite;
 
+import android.content.res.Resources;
 import android.os.StatFs;
 /* import android.os.SystemProperties; */
 
@@ -33,7 +34,7 @@ import android.os.StatFs;
  * code has a chance to run.
  *
  * Verbose SQLite logging is enabled if the "log.tag.SQLiteLog" property is set to "V".
- * (per {@link org.sqlite.database.sqlite.SQLiteDebug#DEBUG_SQL_LOG}).
+ * (per {@link SQLiteDebug#DEBUG_SQL_LOG}).
  *
  * @hide
  */

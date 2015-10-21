@@ -24,6 +24,7 @@
 #include <JNIHelp.h>
 #include "ALog-priv.h"
 
+
 #include <sys/mman.h>
 #include <string.h>
 #include <unistd.h>
@@ -651,8 +652,9 @@ static jboolean copyRowToWindow(
       }
 
       case SQLITE_TEXT: {
-        const char *zVal = (const char*)sqlite3_column_text(pStmt, i);
-        jstring val = pEnv->NewStringUTF(zVal);
+        jchar *pStr = (jchar*)sqlite3_column_text16(pStmt, i);
+        int nStr = sqlite3_column_bytes16(pStmt, i) / sizeof(jchar);
+        jstring val = pEnv->NewString(pStr, nStr);
         bOk = pEnv->CallBooleanMethod(win, aMethod[CW_PUTSTRING].id, val, iRow, i);
         pEnv->DeleteLocalRef(val);
         break;
@@ -720,8 +722,8 @@ static jboolean setWindowNumColumns(
 static jlong nativeExecuteForCursorWindow(
   JNIEnv *pEnv, 
   jclass clazz,
-  jlong connectionPtr,             /* Pointer to SQLiteConnection C++ object */
-  jlong statementPtr,              /* Pointer to sqlite3_stmt object */
+  jlong connectionPtr,            /* Pointer to SQLiteConnection C++ object */
+  jlong statementPtr,             /* Pointer to sqlite3_stmt object */
   jobject win,                    /* The CursorWindow object to populate */
   jint startPos,                  /* First row to add (advisory) */
   jint iRowRequired,              /* Required row */

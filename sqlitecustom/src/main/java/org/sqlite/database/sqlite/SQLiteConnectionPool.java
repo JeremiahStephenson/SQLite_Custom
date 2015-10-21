@@ -345,7 +345,7 @@ public final class SQLiteConnectionPool implements Closeable {
      *
      * @throws IllegalStateException if the pool has been closed.
      * @throws SQLiteException if a database error occurs.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public SQLiteConnection acquireConnection(String sql, int connectionFlags,
             CancellationSignal cancellationSignal) {

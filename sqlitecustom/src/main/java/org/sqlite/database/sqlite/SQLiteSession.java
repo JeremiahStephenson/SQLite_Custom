@@ -21,9 +21,10 @@
 package org.sqlite.database.sqlite;
 
 import android.database.CursorWindow;
-
-import org.sqlite.database.DatabaseUtils;
+import android.database.DatabaseUtils;
 import org.sqlite.os.CancellationSignal;
+import org.sqlite.os.OperationCanceledException;
+import android.os.ParcelFileDescriptor;
 
 /**
  * Provides a single client the ability to use a database.
@@ -49,7 +50,7 @@ import org.sqlite.os.CancellationSignal;
  * <h2>Ownership and concurrency guarantees</h2>
  * <p>
  * Session objects are not thread-safe.  In fact, session objects are thread-bound.
- * The {@link org.sqlite.database.sqlite.SQLiteDatabase} uses a thread-local variable to associate a session
+ * The {@link SQLiteDatabase} uses a thread-local variable to associate a session
  * with each thread for the use of that thread alone.  Consequently, each thread
  * has its own session object and therefore its own transaction state independent
  * of other threads.
@@ -93,7 +94,7 @@ import org.sqlite.os.CancellationSignal;
  * new transaction with the same properties as the original one.
  * Changes committed by {@link #yieldTransaction} cannot be rolled back.
  * </p><p>
- * When a transaction is started, the client can provide a {@link org.sqlite.database.sqlite.SQLiteTransactionListener}
+ * When a transaction is started, the client can provide a {@link SQLiteTransactionListener}
  * to listen for notifications of transaction-related events.
  * </p><p>
  * Recommended usage:
@@ -117,7 +118,7 @@ import org.sqlite.os.CancellationSignal;
  *
  * <h2>Database connections</h2>
  * <p>
- * A {@link org.sqlite.database.sqlite.SQLiteDatabase} can have multiple active sessions at the same
+ * A {@link SQLiteDatabase} can have multiple active sessions at the same
  * time.  Each session acquires and releases connections to the database
  * as needed to perform each requested database transaction.  If all connections
  * are in use, then database transactions on some sessions will block until a
@@ -282,13 +283,13 @@ public final class SQLiteSession {
      * Ignored when creating a nested transaction.
      * @param transactionListener The transaction listener, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      *
      * @throws IllegalStateException if {@link #setTransactionSuccessful} has already been
      * called for the current transaction.
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws SQLiteException if an error occurs.
+     * @throws OperationCanceledException if the operation was canceled.
      *
      * @see #setTransactionSuccessful
      * @see #yieldTransaction
@@ -390,8 +391,8 @@ public final class SQLiteSession {
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      *
      * @throws IllegalStateException if there is no current transaction.
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws SQLiteException if an error occurs.
+     * @throws OperationCanceledException if the operation was canceled.
      *
      * @see #beginTransaction
      * @see #setTransactionSuccessful
@@ -496,8 +497,8 @@ public final class SQLiteSession {
      * @throws IllegalStateException if <code>throwIfNested</code> is true and
      * there is no current transaction, there is a nested transaction in progress or
      * if {@link #setTransactionSuccessful} has already been called for the current transaction.
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws SQLiteException if an error occurs.
+     * @throws OperationCanceledException if the operation was canceled.
      *
      * @see #beginTransaction
      * @see #endTransaction
@@ -557,7 +558,7 @@ public final class SQLiteSession {
      * <p>
      * This method can be used to check for syntax errors during compilation
      * prior to execution of the statement.  If the {@code outStatementInfo} argument
-     * is not null, the provided {@link org.sqlite.database.sqlite.SQLiteStatementInfo} object is populated
+     * is not null, the provided {@link SQLiteStatementInfo} object is populated
      * with information about the statement.
      * </p><p>
      * A prepared statement makes no reference to the arguments that may eventually
@@ -568,13 +569,13 @@ public final class SQLiteSession {
      *
      * @param sql The SQL statement to prepare.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
-     * @param outStatementInfo The {@link org.sqlite.database.sqlite.SQLiteStatementInfo} object to populate
+     * @param outStatementInfo The {@link SQLiteStatementInfo} object to populate
      * with information about the statement, or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws SQLiteException if an error occurs, such as a syntax error.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public void prepare(String sql, int connectionFlags, CancellationSignal cancellationSignal,
             SQLiteStatementInfo outStatementInfo) {
@@ -600,12 +601,12 @@ public final class SQLiteSession {
      * @param sql The SQL statement to execute.
      * @param bindArgs The arguments to bind, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public void execute(String sql, Object[] bindArgs, int connectionFlags,
             CancellationSignal cancellationSignal) {
@@ -631,14 +632,14 @@ public final class SQLiteSession {
      * @param sql The SQL statement to execute.
      * @param bindArgs The arguments to bind, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The value of the first column in the first row of the result set
      * as a <code>long</code>, or zero if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public long executeForLong(String sql, Object[] bindArgs, int connectionFlags,
             CancellationSignal cancellationSignal) {
@@ -664,14 +665,14 @@ public final class SQLiteSession {
      * @param sql The SQL statement to execute.
      * @param bindArgs The arguments to bind, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The value of the first column in the first row of the result set
      * as a <code>String</code>, or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public String executeForString(String sql, Object[] bindArgs, int connectionFlags,
             CancellationSignal cancellationSignal) {
@@ -698,34 +699,34 @@ public final class SQLiteSession {
      * @param sql The SQL statement to execute.
      * @param bindArgs The arguments to bind, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The file descriptor for a shared memory region that contains
      * the value of the first column in the first row of the result set as a BLOB,
      * or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
-//    public ParcelFileDescriptor executeForBlobFileDescriptor(String sql, Object[] bindArgs,
-//            int connectionFlags, CancellationSignal cancellationSignal) {
-//        if (sql == null) {
-//            throw new IllegalArgumentException("sql must not be null.");
-//        }
-//
-//        if (executeSpecial(sql, bindArgs, connectionFlags, cancellationSignal)) {
-//            return null;
-//        }
-//
-//        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
-//        try {
-//            return mConnection.executeForBlobFileDescriptor(sql, bindArgs,
-//                    cancellationSignal); // might throw
-//        } finally {
-//            releaseConnection(); // might throw
-//        }
-//    }
+    public ParcelFileDescriptor executeForBlobFileDescriptor(String sql, Object[] bindArgs,
+            int connectionFlags, CancellationSignal cancellationSignal) {
+        if (sql == null) {
+            throw new IllegalArgumentException("sql must not be null.");
+        }
+
+        if (executeSpecial(sql, bindArgs, connectionFlags, cancellationSignal)) {
+            return null;
+        }
+
+        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        try {
+            return mConnection.executeForBlobFileDescriptor(sql, bindArgs,
+                    cancellationSignal); // might throw
+        } finally {
+            releaseConnection(); // might throw
+        }
+    }
 
     /**
      * Executes a statement that returns a count of the number of rows
@@ -734,13 +735,13 @@ public final class SQLiteSession {
      * @param sql The SQL statement to execute.
      * @param bindArgs The arguments to bind, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The number of rows that were changed.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public int executeForChangedRowCount(String sql, Object[] bindArgs, int connectionFlags,
             CancellationSignal cancellationSignal) {
@@ -768,13 +769,13 @@ public final class SQLiteSession {
      * @param sql The SQL statement to execute.
      * @param bindArgs The arguments to bind, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The row id of the last row that was inserted, or 0 if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public long executeForLastInsertedRowId(String sql, Object[] bindArgs, int connectionFlags,
             CancellationSignal cancellationSignal) {
@@ -796,7 +797,7 @@ public final class SQLiteSession {
     }
 
     /**
-     * Executes a statement and populates the specified {@link android.database.CursorWindow}
+     * Executes a statement and populates the specified {@link CursorWindow}
      * with a range of results.  Returns the number of rows that were counted
      * during query execution.
      *
@@ -810,14 +811,14 @@ public final class SQLiteSession {
      * @param countAllRows True to count all rows that the query would return
      * regagless of whether they fit in the window.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The number of rows that were counted during query execution.  Might
      * not be all rows in the result set unless <code>countAllRows</code> is true.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public int executeForCursorWindow(String sql, Object[] bindArgs,
             CursorWindow window, int startPos, int requiredPos, boolean countAllRows,
@@ -856,14 +857,14 @@ public final class SQLiteSession {
      * @param sql The SQL statement to execute.
      * @param bindArgs The arguments to bind, or null if none.
      * @param connectionFlags The connection flags to use if a connection must be
-     * acquired by this operation.  Refer to {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.
+     * acquired by this operation.  Refer to {@link SQLiteConnectionPool}.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return True if the statement was of a special form that was handled here,
      * false otherwise.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     private boolean executeSpecial(String sql, Object[] bindArgs, int connectionFlags,
             CancellationSignal cancellationSignal) {

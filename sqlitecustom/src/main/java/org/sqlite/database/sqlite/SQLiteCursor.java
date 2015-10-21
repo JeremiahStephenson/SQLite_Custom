@@ -22,7 +22,6 @@ package org.sqlite.database.sqlite;
 
 import android.database.AbstractWindowedCursor;
 import android.database.CursorWindow;
-import android.os.Build;
 import android.util.Log;
 
 import org.sqlite.database.ExtraUtils;
@@ -110,6 +109,7 @@ public class SQLiteCursor extends AbstractWindowedCursor {
         mQuery = query;
 
         mColumns = query.getColumnNames();
+        //mRowIdColumnIndex = ExtraUtils.findRowIdColumnIndex(mColumns);
     }
 
     /**
@@ -148,11 +148,7 @@ public class SQLiteCursor extends AbstractWindowedCursor {
     private void awc_clearOrCreateWindow(String name){
       CursorWindow win = getWindow();
       if( win==null ){
-          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-              win = new CursorWindow(false);
-          } else {
-              win = new CursorWindow(name);
-          }
+        win = new CursorWindow(name);
         setWindow(win);
       }else{
         win.clear();
