@@ -2,7 +2,7 @@
 
 ## Overview
 
-The purpose of this project is to use the Android NDK to create a custom version of SQLite to be embedded within an application and run on any Android device with Android 2.3 or later.
+The purpose of this project is to use the Android NDK to create a custom version of SQLite to be embedded within an application and run on any Android device with Android API 15 or later.
 This library can be further customized by adding additional SQLite tokenizers.
 
 ## Build
@@ -40,26 +40,18 @@ You can change the perspective to 'Project' and view all the files. The other op
 
 ## Java Interface
 
-Most of the code is taken directly from this [repository](http://www.sqlite.org/android/tree?ci=trunk "Title").
+Most of the code is taken directly from this [repository](http://www.sqlite.org/android/tree?ci=api-level-15 "Title").
 
 One of the main differences with this repository is that the code is broken up into two separate modules.
 
 1. An app that can be used for testing the custom SQLite database.
 2. The library project containing all relevant C, C++, and Java code for the custom SQLite database. This compiles into an aar that can be used for any application.
 
-Some additional classes were pulled from the [api-level-15](http://www.sqlite.org/android/timeline?n=100&r=api-level-15 "Title") branch to allow for compatibility with API 15.
-
-To allow for the project to be compatible with API 10 and up the `executeForBlobFileDescriptor(String sql, Object[] bindArgs, CancellationSignal cancellationSignal)` had to be removed. 
-This call was using a class that incompatible with API 10.
-                                                                          
-Other additional changes were implemented to allow for compatibility with API 10 and above including the addition of DatabaseUtils. All other source files have had their imports adjusted to account for the changes.
-
-If anything is updated in the source [repository](http://www.sqlite.org/android/tree?ci=trunk "Title") the code can be copied over fairly easily. 
-Some import statements might need to be adjusted to point to some of the OS related classes such as `CancellationSignal`.
+Some customization has been implemented to allow for custom tokenizers. 
 
 ##SQLite
 
-The initial code for SQLite was pulled from this [repository](http://www.sqlite.org/android/tree?ci=trunk "Title") but the version of SQLite has since been update to 3.8.8.2.
+The initial code for SQLite was pulled from this [repository](http://www.sqlite.org/android/tree?ci=api-level-15 "Title") but the version of SQLite has since been update to 3.9.1.
 As SQLite is update this can be updated in this repository easily by downloading the amalgamation source from [here](http://www.sqlite.org/download.html "Title"). 
 Extract the source from the zip file and copy the updated files into the jni folder. That is all that needs to be done to update the version of SQLite.
 
