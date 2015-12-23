@@ -54,8 +54,9 @@ struct SQLiteConnection {
     volatile bool canceled;
 
     SQLiteConnection(sqlite3* db, int openFlags, const std::string& path, const std::string& label) :
-        db(db), openFlags(openFlags), path(path), label(label), canceled(false) { }
+            db(db), openFlags(openFlags), path(path), label(label), canceled(false) { }
 };
+
 
 /* throw a SQLiteException with a message appropriate for the error in handle */
 void throw_sqlite3_exception(JNIEnv* env, sqlite3* handle);

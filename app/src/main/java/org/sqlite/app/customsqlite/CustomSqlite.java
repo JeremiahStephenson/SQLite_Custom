@@ -476,6 +476,51 @@ public class CustomSqlite extends Activity {
         db.close();
     }
 
+    private void suppCharTest1() throws Exception {
+        SQLiteDatabase.deleteDatabase(DB_PATH);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
+        String res = "";
+        String smiley = new String( Character.toChars(0x1F601) );
+
+        db.execSQL("CREATE TABLE t1(x)");
+        db.execSQL("INSERT INTO t1 VALUES ('a" + smiley + "b')");
+
+        res = stringFromT1X(db);
+
+        testResult("supp_char_test1." + smiley, res, ".a" + smiley + "b");
+
+        db.close();
+    }
+
+    private void suppCharTest2() throws Exception {
+        SQLiteDatabase.deleteDatabase(DB_PATH);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
+        String res = "";
+        String smiley = new String( Character.toChars(0x1F638) );
+
+        db.execSQL("CREATE TABLE t1(x)");
+        db.execSQL("INSERT INTO t1 VALUES ('a" + smiley + "b')");
+
+        res = stringFromT1X(db);
+
+        testResult("supp_char_test2." + smiley, res, ".a" + smiley + "b");
+
+        db.close();
+    }
+
+    private String stringFromT1X(SQLiteDatabase db){
+        String res = "";
+
+        Cursor c = db.rawQuery("SELECT x FROM t1", null);
+        boolean bRes;
+        for(bRes=c.moveToFirst(); bRes; bRes=c.moveToNext()){
+            String x = c.getString(0);
+            res = res + "." + x;
+        }
+
+        return res;
+    }
+
     private void runTheTests() {
         System.loadLibrary("sqliteX"); // loads the custom sqlite library
         System.loadLibrary("tokenizers"); // loads the tokenizer library
@@ -503,6 +548,8 @@ public class CustomSqlite extends Activity {
                     ftsTest1();
                     ftsTest2();
                     ftsTest3();
+                    suppCharTest1();
+                    suppCharTest2();
                     return null;
                 } catch(Exception e) {
                     appendString("Exception: " + e.toString() + "\n");

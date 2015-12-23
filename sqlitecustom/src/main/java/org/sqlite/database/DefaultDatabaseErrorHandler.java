@@ -20,14 +20,13 @@
 
 package org.sqlite.database;
 
-import android.util.Log;
-import android.util.Pair;
+import java.io.File;
+import java.util.List;
 
 import org.sqlite.database.sqlite.SQLiteDatabase;
 import org.sqlite.database.sqlite.SQLiteException;
-
-import java.io.File;
-import java.util.List;
+import android.util.Log;
+import android.util.Pair;
 
 /**
  * Default class used to define the actions to take when the database corruption is reported
@@ -37,9 +36,9 @@ import java.util.List;
  * following:
  * <ul>
  *   <li>{@link SQLiteDatabase#openOrCreateDatabase(String,
- *      org.sqlite.database.sqlite.SQLiteDatabase.CursorFactory, DatabaseErrorHandler)}</li>
+ *      SQLiteDatabase.CursorFactory, DatabaseErrorHandler)}</li>
  *   <li>{@link SQLiteDatabase#openDatabase(String,
- *      org.sqlite.database.sqlite.SQLiteDatabase.CursorFactory, int, DatabaseErrorHandler)}</li>
+ *      SQLiteDatabase.CursorFactory, int, DatabaseErrorHandler)}</li>
  * </ul>
  * The specified {@link DatabaseErrorHandler} is used to handle database corruption errors, if they
  * occur.

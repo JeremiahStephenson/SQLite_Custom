@@ -21,13 +21,13 @@
 package org.sqlite.database.sqlite;
 
 import android.database.CursorWindow;
+import org.sqlite.os.CancellationSignal;
+import org.sqlite.os.OperationCanceledException;
 import android.util.Log;
 
-import org.sqlite.os.CancellationSignal;
-
 /**
- * Represents a query that reads the resulting rows into a {@link org.sqlite.database.sqlite.SQLiteQuery}.
- * This class is used by {@link org.sqlite.database.sqlite.SQLiteCursor} and isn't useful itself.
+ * Represents a query that reads the resulting rows into a {@link SQLiteQuery}.
+ * This class is used by {@link SQLiteCursor} and isn't useful itself.
  * <p>
  * This class is not thread-safe.
  * </p>
@@ -55,8 +55,8 @@ public final class SQLiteQuery extends SQLiteProgram {
      * @return Number of rows that were enumerated.  Might not be all rows
      * unless countAllRows is true.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs.
-     * @throws org.sqlite.os.OperationCanceledException if the operation was canceled.
+     * @throws SQLiteException if an error occurs.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     int fillWindow(CursorWindow window, int startPos, int requiredPos, boolean countAllRows) {
         acquireReference();

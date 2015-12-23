@@ -21,18 +21,19 @@
 package org.sqlite.database.sqlite;
 
 /* import dalvik.system.BlockGuard; */
+import org.sqlite.database.sqlite.CloseGuard;
 
 import android.database.Cursor;
 import android.database.CursorWindow;
-import android.os.Build;
-import android.support.v4.util.LruCache;
-import android.util.Log;
-import android.util.Printer;
-
-import org.sqlite.database.DatabaseUtils;
+import android.database.DatabaseUtils;
 import org.sqlite.database.ExtraUtils;
 import org.sqlite.database.sqlite.SQLiteDebug.DbStats;
 import org.sqlite.os.CancellationSignal;
+import org.sqlite.os.OperationCanceledException;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
+import android.util.LruCache;
+import android.util.Printer;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ import java.util.regex.Pattern;
  * Connection objects are not thread-safe.  They are acquired as needed to
  * perform a database operation and are then returned to the pool.  At any
  * given time, a connection is either owned and used by a {@link SQLiteSession}
- * object or the {@link org.sqlite.database.sqlite.SQLiteConnectionPool}.  Those classes are
+ * object or the {@link SQLiteConnectionPool}.  Those classes are
  * responsible for serializing operations to guard against concurrent
  * use of a connection.
  * </p><p>
@@ -407,7 +408,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     public void enableLocalizedCollators(){
       if( nativeHasCodec() ){
-	    setLocaleFromConfiguration();
+	setLocaleFromConfiguration();
       }
     }
 
@@ -487,7 +488,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * <p>
      * This method can be used to check for syntax errors during compilation
      * prior to execution of the statement.  If the {@code outStatementInfo} argument
-     * is not null, the provided {@link org.sqlite.database.sqlite.SQLiteStatementInfo} object is populated
+     * is not null, the provided {@link SQLiteStatementInfo} object is populated
      * with information about the statement.
      * </p><p>
      * A prepared statement makes no reference to the arguments that may eventually
@@ -501,10 +502,10 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * </p>
      *
      * @param sql The SQL statement to prepare.
-     * @param outStatementInfo The {@link org.sqlite.database.sqlite.SQLiteStatementInfo} object to populate
+     * @param outStatementInfo The {@link SQLiteStatementInfo} object to populate
      * with information about the statement, or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error.
+     * @throws SQLiteException if an error occurs, such as a syntax error.
      */
     public void prepare(String sql, SQLiteStatementInfo outStatementInfo) {
         if (sql == null) {
@@ -549,9 +550,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * @param bindArgs The arguments to bind, or null if none.
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws android.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public void execute(String sql, Object[] bindArgs,
             CancellationSignal cancellationSignal) {
@@ -592,9 +593,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * @return The value of the first column in the first row of the result set
      * as a <code>long</code>, or zero if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws android.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public long executeForLong(String sql, Object[] bindArgs,
             CancellationSignal cancellationSignal) {
@@ -635,9 +636,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * @return The value of the first column in the first row of the result set
      * as a <code>String</code>, or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws android.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public String executeForString(String sql, Object[] bindArgs,
             CancellationSignal cancellationSignal) {
@@ -680,42 +681,42 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * the value of the first column in the first row of the result set as a BLOB,
      * or null if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws android.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
-//    public ParcelFileDescriptor executeForBlobFileDescriptor(String sql, Object[] bindArgs,
-//            CancellationSignal cancellationSignal) {
-//        if (sql == null) {
-//            throw new IllegalArgumentException("sql must not be null.");
-//        }
-//
-//        final int cookie = mRecentOperations.beginOperation("executeForBlobFileDescriptor",
-//                sql, bindArgs);
-//        try {
-//            final PreparedStatement statement = acquirePreparedStatement(sql);
-//            try {
-//                throwIfStatementForbidden(statement);
-//                bindArguments(statement, bindArgs);
-//                applyBlockGuardPolicy(statement);
-//                attachCancellationSignal(cancellationSignal);
-//                try {
-//                    int fd = nativeExecuteForBlobFileDescriptor(
-//                            mConnectionPtr, statement.mStatementPtr);
-//                    return fd >= 0 ? ParcelFileDescriptor.adoptFd(fd) : null;
-//                } finally {
-//                    detachCancellationSignal(cancellationSignal);
-//                }
-//            } finally {
-//                releasePreparedStatement(statement);
-//            }
-//        } catch (RuntimeException ex) {
-//            mRecentOperations.failOperation(cookie, ex);
-//            throw ex;
-//        } finally {
-//            mRecentOperations.endOperation(cookie);
-//        }
-//    }
+    public ParcelFileDescriptor executeForBlobFileDescriptor(String sql, Object[] bindArgs,
+            CancellationSignal cancellationSignal) {
+        if (sql == null) {
+            throw new IllegalArgumentException("sql must not be null.");
+        }
+
+        final int cookie = mRecentOperations.beginOperation("executeForBlobFileDescriptor",
+                sql, bindArgs);
+        try {
+            final PreparedStatement statement = acquirePreparedStatement(sql);
+            try {
+                throwIfStatementForbidden(statement);
+                bindArguments(statement, bindArgs);
+                applyBlockGuardPolicy(statement);
+                attachCancellationSignal(cancellationSignal);
+                try {
+                    int fd = nativeExecuteForBlobFileDescriptor(
+                            mConnectionPtr, statement.mStatementPtr);
+                    return fd >= 0 ? ParcelFileDescriptor.adoptFd(fd) : null;
+                } finally {
+                    detachCancellationSignal(cancellationSignal);
+                }
+            } finally {
+                releasePreparedStatement(statement);
+            }
+        } catch (RuntimeException ex) {
+            mRecentOperations.failOperation(cookie, ex);
+            throw ex;
+        } finally {
+            mRecentOperations.endOperation(cookie);
+        }
+    }
 
     /**
      * Executes a statement that returns a count of the number of rows
@@ -726,9 +727,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The number of rows that were changed.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws android.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public int executeForChangedRowCount(String sql, Object[] bindArgs,
             CancellationSignal cancellationSignal) {
@@ -775,9 +776,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
      * @return The row id of the last row that was inserted, or 0 if none.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws android.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public long executeForLastInsertedRowId(String sql, Object[] bindArgs,
             CancellationSignal cancellationSignal) {
@@ -812,7 +813,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     }
 
     /**
-     * Executes a statement and populates the specified {@link android.database.CursorWindow}
+     * Executes a statement and populates the specified {@link CursorWindow}
      * with a range of results.  Returns the number of rows that were counted
      * during query execution.
      *
@@ -829,9 +830,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * @return The number of rows that were counted during query execution.  Might
      * not be all rows in the result set unless <code>countAllRows</code> is true.
      *
-     * @throws org.sqlite.database.sqlite.SQLiteException if an error occurs, such as a syntax error
+     * @throws SQLiteException if an error occurs, such as a syntax error
      * or invalid number of bind arguments.
-     * @throws android.os.OperationCanceledException if the operation was canceled.
+     * @throws OperationCanceledException if the operation was canceled.
      */
     public int executeForCursorWindow(String sql, Object[] bindArgs,
             CursorWindow window, int startPos, int requiredPos, boolean countAllRows,
@@ -1143,13 +1144,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         // Get information about attached databases.
         // We ignore the first row in the database list because it corresponds to
         // the main database which we have already described.
-        CursorWindow window;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-            window = new CursorWindow(false);
-        } else {
-            window = new CursorWindow("collectDbStats");
-        }
-
+        CursorWindow window = new CursorWindow("collectDbStats");
         try {
             executeForCursorWindow("PRAGMA database_list;", null, window, 0, 0, false, null);
             for (int i = 1; i < window.getNumRows(); i++) {
@@ -1236,7 +1231,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * Holder type for a prepared statement.
      *
      * Although this object holds a pointer to a native statement object, it
-     * does not have a finalizer.  This is deliberate.  The {@link org.sqlite.database.sqlite.SQLiteConnection}
+     * does not have a finalizer.  This is deliberate.  The {@link SQLiteConnection}
      * owns the statement object and will take care of freeing it when needed.
      * In particular, closing the connection requires a guarantee of deterministic
      * resource disposal because all native statement objects must be freed before

@@ -20,6 +20,8 @@
 
 package org.sqlite.database.sqlite;
 
+import android.os.ParcelFileDescriptor;
+
 /**
  * Represents a statement that can be executed against a database.  The statement
  * cannot return multiple rows or columns, but single value (1 x 1) result sets
@@ -101,7 +103,7 @@ public final class SQLiteStatement extends SQLiteProgram {
      *
      * @return The result of the query.
      *
-     * @throws SQLiteDoneException if the query returns zero rows
+     * @throws org.sqlite.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public long simpleQueryForLong() {
         acquireReference();
@@ -122,7 +124,7 @@ public final class SQLiteStatement extends SQLiteProgram {
      *
      * @return The result of the query.
      *
-     * @throws SQLiteDoneException if the query returns zero rows
+     * @throws org.sqlite.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public String simpleQueryForString() {
         acquireReference();
@@ -143,20 +145,20 @@ public final class SQLiteStatement extends SQLiteProgram {
      * @return A read-only file descriptor for a copy of the blob value, or {@code null}
      *         if the value is null or could not be read for some reason.
      *
-     * @throws SQLiteDoneException if the query returns zero rows
+     * @throws org.sqlite.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
-//    public ParcelFileDescriptor simpleQueryForBlobFileDescriptor() {
-//        acquireReference();
-//        try {
-//            return getSession().executeForBlobFileDescriptor(
-//                    getSql(), getBindArgs(), getConnectionFlags(), null);
-//        } catch (SQLiteDatabaseCorruptException ex) {
-//            onCorruption();
-//            throw ex;
-//        } finally {
-//            releaseReference();
-//        }
-//    }
+    public ParcelFileDescriptor simpleQueryForBlobFileDescriptor() {
+        acquireReference();
+        try {
+            return getSession().executeForBlobFileDescriptor(
+                    getSql(), getBindArgs(), getConnectionFlags(), null);
+        } catch (SQLiteDatabaseCorruptException ex) {
+            onCorruption();
+            throw ex;
+        } finally {
+            releaseReference();
+        }
+    }
 
     @Override
     public String toString() {

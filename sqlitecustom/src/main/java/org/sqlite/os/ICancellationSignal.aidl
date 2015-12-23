@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,11 @@
 ** sqlite-dev@sqlite.org.
 */
 
-package org.sqlite.database.sqlite;
+package org.sqlite.os;
 
-public class SQLiteTableLockedException extends SQLiteException {
-    public SQLiteTableLockedException() {}
-
-    public SQLiteTableLockedException(String error) {
-        super(error);
-    }
+/**
+ * @hide
+ */
+interface ICancellationSignal {
+    oneway void cancel();
 }
