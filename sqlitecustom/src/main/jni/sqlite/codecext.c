@@ -313,7 +313,7 @@ int sqlite3_rekey_v2(sqlite3 *db, const char *zDbName, const void *zKey, int nKe
     {
       if (n == nSkip) continue;
 #if (SQLITE_VERSION_NUMBER >= 3003014)
-      rc = sqlite3PagerGet(pPager, n, &pPage);
+      rc = sqlite3PagerGet(pPager, n, &pPage, 0);
 #else
       rc = sqlite3pager_get(pPager, n, &pPage);
 #endif
