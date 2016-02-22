@@ -370,6 +370,37 @@ public class CustomSqlite extends Activity {
         testResult("see_test_2.5", dbIsEncrypted(), "encrypted");
     }
 
+    private void regExpTest1() throws Exception {
+        if (!SQLiteDatabase.hasCodec()) {
+            return;
+        }
+
+        SQLiteDatabase.deleteDatabase(DB_PATH);
+
+        MyHelper helper = new MyHelper(this);
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libpcre"});
+        if (load == null || !load.moveToFirst()) {
+            throw new RuntimeException("REGEXP load failed!");
+        }
+
+        db.execSQL("INSERT INTO t1 VALUES ('This is a test'), ('This is another test'), ('Testing is not fun')");
+
+        final Cursor c = db.rawQuery("SELECT * FROM t1 WHERE x REGEXP ?", new String[]{"\\btest\\b"});
+        if (c != null && c.moveToFirst()) {
+            testResult("reg_exp_text_1.0", String.valueOf(c.getCount()), "2");
+        } else {
+            testResult("reg_exp_test_1.0", "0", "2");
+        }
+
+        if (c != null) {
+            c.close();
+        }
+
+        db.close();
+    }
+
     private void ftsTest1() throws Exception {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
@@ -545,6 +576,7 @@ public class CustomSqlite extends Activity {
                     threadTest2();
                     seeTest1();
                     seeTest2();
+                    regExpTest1();
                     ftsTest1();
                     ftsTest2();
                     ftsTest3();
