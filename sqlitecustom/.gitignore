@@ -12,6 +12,7 @@
 
 # Java class files
 *.class
+*.so
 
 # generated files
 bin/
@@ -34,9 +35,3 @@ proguard/
 *.ipr
 *.iws
 .idea/
-.gradle/1.9/taskArtifacts/cache.properties
-.gradle/1.9/taskArtifacts/cache.properties.lock
-.gradle/1.9/taskArtifacts/fileHashes.bin
-.gradle/1.9/taskArtifacts/fileSnapshots.bin
-.gradle/1.9/taskArtifacts/outputFileStates.bin
-.gradle/1.9/taskArtifacts/taskArtifacts.bin
