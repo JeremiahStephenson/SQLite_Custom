@@ -554,7 +554,16 @@ public class CustomSqlite extends Activity {
 
     private void runTheTests() {
         System.loadLibrary("sqliteX"); // loads the custom sqlite library
-        System.loadLibrary("tokenizers"); // loads the tokenizer library
+        try {
+            System.loadLibrary("tokenizers"); // loads the tokenizer library
+        } catch (UnsatisfiedLinkError error) {
+            // do nothing
+        }
+        try {
+            System.loadLibrary("pcre"); // loads the tokenizer library
+        } catch (UnsatisfiedLinkError error) {
+            // do nothing
+        }
         DB_PATH = getApplicationContext().getDatabasePath("test.db");
         DB_PATH.mkdirs();
 
