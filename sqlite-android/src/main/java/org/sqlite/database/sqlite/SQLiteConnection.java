@@ -41,6 +41,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static android.R.attr.name;
+
 /**
  * Represents a SQLite database connection.
  * Each connection wraps an instance of a native <code>sqlite3</code> object.
@@ -93,6 +95,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private static final String TAG = "SQLiteConnection";
     private static final boolean DEBUG = false;
 
+    public static final int SQLITE_OK = 0;
+    public static final int SQLITE_ERROR = 1;
+
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
@@ -128,6 +133,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private static native void nativeRegisterCustomFunction(long connectionPtr,
             SQLiteCustomFunction function);
     private static native void nativeRegisterTokenizer(long connectionPtr, String name, String data);
+    private static native int nativeLoadExtension(long connectionPtr, String name);
     private static native void nativeRegisterLocalizedCollators(long connectionPtr, String locale);
     private static native long nativePrepareStatement(long connectionPtr, String sql);
     private static native void nativeFinalizeStatement(long connectionPtr, long statementPtr);
@@ -993,8 +999,24 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         nativeCancel(mConnectionPtr);
     }
 
-    public void registerTokenizer(String name, String data) {
-        nativeRegisterTokenizer(mConnectionPtr, name, data);
+    void registerTokenizer(String name, String data) {
+        try {
+            nativeRegisterTokenizer(mConnectionPtr, name, data);
+        } catch (SQLiteException ex) {
+            if (DEBUG) {
+                Log.d(TAG, "Could not register tokenizer: " + name + "\n" + ex.getMessage());
+            }
+        }
+    }
+
+    void loadExtension(String name) throws RuntimeException {
+        try {
+            nativeLoadExtension(mConnectionPtr, name);
+        } catch (SQLiteException ex) {
+            if (DEBUG) {
+                Log.d(TAG, "Could not load extension: " + name + "\n" + ex.getMessage());
+            }
+        }
     }
 
     private void bindArguments(PreparedStatement statement, Object[] bindArgs) {

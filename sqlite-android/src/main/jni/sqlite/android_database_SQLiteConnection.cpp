@@ -208,6 +208,20 @@ static void nativeClose(JNIEnv* env, jclass clazz, jlong connectionPtr) {
     }
 }
 
+// Called for loading an external extension
+static jint nativeLoadExtension(JNIEnv* env, jclass obj, jlong connectionPtr, jstring name) {
+    const char *nameStr = env->GetStringUTFChars(name, NULL);
+
+    int err = SQLITE_ERROR;
+    SQLiteConnection* connection = reinterpret_cast<SQLiteConnection*>(connectionPtr);
+    if (connection) {
+        err = sqlite3_load_extension(connection->db, nameStr, 0, 0);
+    }
+
+    env->ReleaseStringUTFChars(name, nameStr);
+    return err;
+}
+
 // Called each time a custom function is evaluated.
 static void sqliteCustomFunctionCallback(sqlite3_context *context,
         int argc, sqlite3_value **argv) {
@@ -900,6 +914,8 @@ static JNINativeMethod sMethods[] =
             (void*)nativeCancel },
     { "nativeResetCancel", "(JZ)V",
             (void*)nativeResetCancel },
+    { "nativeLoadExtension", "(JLjava/lang/String;)I",
+            (void*)nativeLoadExtension },
 
     { "nativeHasCodec", "()Z", (void*)nativeHasCodec },
 };
