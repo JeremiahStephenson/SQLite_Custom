@@ -13,8 +13,8 @@ buildscript {
 apply plugin: 'com.android.library'
 
 def versionMajor = 3
-def versionMinor = 12
-def versionPatch = 2
+def versionMinor = 13
+def versionPatch = 0
 version = "${versionMajor}.${versionMinor}.${versionPatch}"
 
 android {
