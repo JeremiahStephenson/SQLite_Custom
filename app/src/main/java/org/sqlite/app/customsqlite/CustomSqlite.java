@@ -380,10 +380,7 @@ public class CustomSqlite extends Activity {
         MyHelper helper = new MyHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libpcre"});
-        if (load == null || !load.moveToFirst()) {
-            throw new RuntimeException("REGEXP load failed!");
-        }
+        db.loadExtension("libpcre");
 
         db.execSQL("INSERT INTO t1 VALUES ('This is a test'), ('This is another test'), ('Testing is not fun')");
 
@@ -405,11 +402,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libtokenizers"});
-        if (load == null || !load.moveToFirst()) {
-            throw new RuntimeException("Unicode Extension load failed!");
-        }
-
+        db.loadExtension("libtokenizers");
         db.registerTokenizer(Tokenizer.HTML_TOKENIZER);
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts4(name, tokenize=HTMLTokenizer)");
@@ -439,11 +432,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?, ?)", new String[]{"libtokenizers"});
-        if (load == null || !load.moveToFirst()) {
-            throw new RuntimeException("Unicode Extension load failed!");
-        }
-
+        db.loadExtension("libtokenizers");
         db.registerTokenizer(Tokenizer.CHARACTER_TOKENIZER);
 
         db.execSQL("CREATE VIRTUAL TABLE Book USING fts3(name TEXT NOT NULL, author TEXT, tokenize=character)");
@@ -474,11 +463,7 @@ public class CustomSqlite extends Activity {
         SQLiteDatabase.deleteDatabase(DB_PATH);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
 
-        final Cursor load = db.rawQuery("SELECT load_extension(?)", new String[]{"libtokenizers"});
-        if (load == null || !load.moveToFirst()) {
-            throw new RuntimeException("Tokenizer Extension load failed!");
-        }
-
+        db.loadExtension("libtokenizers");
         db.registerTokenizer(Tokenizer.HTML_TOKENIZER);
 
         db.execSQL("CREATE VIRTUAL TABLE v1 USING fts3(name, tokenize=HTMLTokenizer stemmer=english)");

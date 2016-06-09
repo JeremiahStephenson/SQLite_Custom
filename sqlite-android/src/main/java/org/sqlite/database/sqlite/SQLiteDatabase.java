@@ -870,6 +870,18 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
+     * Load an extension
+     * @param name the name of the extension so file
+     * @throws RuntimeException
+     */
+    public void loadExtension(String name) throws RuntimeException {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            mConnectionPoolLocked.loadExtension(name);
+        }
+    }
+
+    /**
      * Gets the database version.
      *
      * @return the database version

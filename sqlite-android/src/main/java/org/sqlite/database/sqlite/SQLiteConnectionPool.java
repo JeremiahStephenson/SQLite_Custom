@@ -460,7 +460,7 @@ public final class SQLiteConnectionPool implements Closeable {
         }
     }
 
-    public void registerTokenizer(String name, String data) {
+    void registerTokenizer(String name, String data) throws RuntimeException {
         synchronized (mLock) {
             if (mAvailablePrimaryConnection != null) {
                 mAvailablePrimaryConnection.registerTokenizer(name, data);
@@ -472,6 +472,22 @@ public final class SQLiteConnectionPool implements Closeable {
 
             for (SQLiteConnection connection : mAcquiredConnections.keySet()) {
                 connection.registerTokenizer(name, data);
+            }
+        }
+    }
+
+    void loadExtension(String name) throws RuntimeException {
+        synchronized (mLock) {
+            if (mAvailablePrimaryConnection != null) {
+                mAvailablePrimaryConnection.loadExtension(name);
+            }
+
+            for (SQLiteConnection connection : mAvailableNonPrimaryConnections) {
+                connection.loadExtension(name);
+            }
+
+            for (SQLiteConnection connection : mAcquiredConnections.keySet()) {
+                connection.loadExtension(name);
             }
         }
     }
