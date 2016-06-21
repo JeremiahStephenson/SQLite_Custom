@@ -564,12 +564,12 @@ public class CustomSqlite extends Activity {
             public Object call() throws Exception {
                 try {
                     reportVersion();
-                    csrTest1();
-                    csrTest2();
-                    threadTest1();
-                    threadTest2();
-                    seeTest1();
-                    seeTest2();
+                    //csrTest1();
+                    //csrTest2();
+                    //threadTest1();
+                    //threadTest2();
+                    //seeTest1();
+                    //seeTest2();
                     regExpTest1();
                     ftsTest1();
                     ftsTest2();

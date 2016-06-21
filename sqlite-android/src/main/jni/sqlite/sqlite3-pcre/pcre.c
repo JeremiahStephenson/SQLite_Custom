@@ -9,10 +9,10 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pcre.h>
-#include <sqlite3ext.h>
+#include "../pcre-8.38-generic/pcre.h"
 #include <stdbool.h>
 #include <pthread.h>
+#include "../sqlite3ext.h"
 
 SQLITE_EXTENSION_INIT1
 
@@ -117,19 +117,23 @@ void regexp(sqlite3_context *ctx, int argc, sqlite3_value **argv)
     }
 }
 
-int sqlite3_extension_init(sqlite3 *db, char **err, const sqlite3_api_routines *api)
+int sqlite3_pcre_init(
+		sqlite3 *db,          /* The database connection */
+		char **pzErrMsg,      /* Write error messages here */
+		const sqlite3_api_routines *pApi  /* API methods */
+)
 {
-  static bool is_mylock_valid = false;
+	static bool is_mylock_valid = false;
 
-  if (!is_mylock_valid) {
-    pthread_mutex_init(&mylock, NULL);
-    is_mylock_valid = true;
-  }
+	if (!is_mylock_valid) {
+		pthread_mutex_init(&mylock, NULL);
+		is_mylock_valid = true;
+	}
 
-	SQLITE_EXTENSION_INIT2(api)
+	SQLITE_EXTENSION_INIT2(pApi);
 	cache_entry *cache = calloc(CACHE_SIZE, sizeof(cache_entry));
 	if (!cache) {
-	    *err = "calloc: ENOMEM";
+	    *pzErrMsg = "calloc: ENOMEM";
 	    return 1;
 	}
 	sqlite3_create_function(db, "REGEXP", 2, SQLITE_UTF8, cache, regexp, NULL, NULL);

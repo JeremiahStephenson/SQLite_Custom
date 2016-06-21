@@ -213,10 +213,15 @@ static jint nativeLoadExtension(JNIEnv* env, jclass obj, jlong connectionPtr, js
     const char *nameStr = env->GetStringUTFChars(name, NULL);
 
     int err = SQLITE_ERROR;
+    char *error = (char*)sqlite3_malloc(8);
     SQLiteConnection* connection = reinterpret_cast<SQLiteConnection*>(connectionPtr);
     if (connection) {
-        err = sqlite3_load_extension(connection->db, nameStr, 0, 0);
+        err = sqlite3_load_extension(connection->db, nameStr, 0, &error);
     }
+
+    ALOGE("extension failed: %s", error);
+
+    sqlite3_free(error);
 
     env->ReleaseStringUTFChars(name, nameStr);
     return err;
