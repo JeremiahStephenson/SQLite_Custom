@@ -380,7 +380,7 @@ public class CustomSqlite extends Activity {
         MyHelper helper = new MyHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        db.loadExtension("libpcre");
+        db.loadExtension("libregex");
 
         db.execSQL("INSERT INTO t1 VALUES ('This is a test'), ('This is another test'), ('Testing is not fun')");
 
@@ -545,10 +545,11 @@ public class CustomSqlite extends Activity {
             // do nothing
         }
         try {
-            System.loadLibrary("pcre"); // loads the tokenizer library
+            System.loadLibrary("regex"); // loads the tokenizer library
         } catch (UnsatisfiedLinkError error) {
             // do nothing
         }
+
         DB_PATH = getApplicationContext().getDatabasePath("test.db");
         DB_PATH.mkdirs();
 
@@ -570,7 +571,7 @@ public class CustomSqlite extends Activity {
                     threadTest2();
                     seeTest1();
                     seeTest2();
-                    //regExpTest1();
+                    regExpTest1();
                     ftsTest1();
                     ftsTest2();
                     ftsTest3();
