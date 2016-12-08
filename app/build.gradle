@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "org.sqlite.app.customsqlite"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
     }
 
     dependencies {
         compile project(':sqlite-android')
-        compile 'com.android.support:appcompat-v7:24.1.1' // includes support-v4
+        compile 'com.android.support:appcompat-v7:25.0.1' // includes support-v4
         compile fileTree(dir: 'libs', include: ['*.jar'])
     }
 
